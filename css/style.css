@@ -212,6 +212,38 @@ body{
   animation:pulse var(--beat,1s) ease-in-out infinite;
 }
 
+/* ============ MUSIC ============ */
+
+.music{
+  position:fixed; z-index:20;
+  top:calc(env(safe-area-inset-top) + 10px); right:12px;
+  display:flex; align-items:center; gap:8px;
+  padding:9px 14px 9px 11px; border:0; border-radius:100px; cursor:pointer;
+  font-family:inherit; font-size:.82rem; font-weight:500; letter-spacing:.06em;
+  color:#1a0620;
+  background:linear-gradient(100deg,#fff 0%,#ffe9a8 40%,#ffb3d8 75%,#fff 100%);
+  background-size:220% 100%;
+  box-shadow:0 4px 20px rgba(255,79,163,.4);
+  animation:shine 7s linear infinite;
+  transition:transform .15s ease;
+}
+.music:hover{ transform:scale(1.04); }
+.music svg{ width:16px; height:16px; fill:currentColor; display:block; }
+.music .label{ white-space:nowrap; }
+
+/* once it is playing there is nothing left to explain, so it collapses
+   to a bare pause button and stops competing with the invitation */
+.music.playing{
+  padding:10px; background:rgba(12,8,20,.6); color:var(--ink);
+  border:1px solid rgba(255,255,255,.28);
+  box-shadow:none; animation:none;
+  -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px);
+}
+
+@media (max-width:420px){
+  .music{ font-size:.76rem; padding:8px 12px 8px 10px; }
+}
+
 .scroll-hint{
   position:absolute; z-index:7; bottom:12px; right:14px;
   width:24px; height:38px; border:1.5px solid rgba(255,255,255,.28); border-radius:13px;
