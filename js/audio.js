@@ -29,8 +29,27 @@
     } catch (e) { /* nothing we can do, and nothing worth breaking over */ }
   }
 
-  var audio = new Audio(SRC);
+  /* Where to pick up. A media fragment is part of the resource URL, so the
+     browser starts there as it loads. Setting currentTime afterwards is the
+     fragile route: on a freshly created element some browsers ignore the seek,
+     or reset it to zero when play() is called, and the song starts over. */
+  var resumeAt = (want.playing && want.t > 1) ? want.t : 0;
+  var audio = new Audio(SRC + (resumeAt ? '#t=' + resumeAt.toFixed(2) : ''));
   audio.preload = 'auto';
+
+  /* Belt and braces: re-apply the position until it actually sticks. */
+  function holdPosition() {
+    if (!resumeAt) return;
+    if (!isFinite(audio.duration) || resumeAt >= audio.duration - 1) { resumeAt = 0; return; }
+    if (Math.abs(audio.currentTime - resumeAt) > 2) {
+      try { audio.currentTime = resumeAt; } catch (e) { /* not seekable yet */ }
+    } else {
+      resumeAt = 0;                          /* landed; stop interfering */
+    }
+  }
+  ['loadeddata', 'canplay', 'canplaythrough', 'playing'].forEach(function (ev) {
+    audio.addEventListener(ev, holdPosition);
+  });
 
   /* No song in the repo, or it failed to load: say nothing, show nothing.
      A dead control is worse than no control. */
@@ -38,9 +57,7 @@
 
   audio.addEventListener('loadedmetadata', function () {
     btn.hidden = false;
-    if (want.t > 0 && want.t < audio.duration - 1) {
-      try { audio.currentTime = want.t; } catch (e) {}
-    }
+    holdPosition();
     if (want.playing) attempt();
   });
 
@@ -70,11 +87,15 @@
     armed = true;
     paint(false, true);                     /* show the words, they must tap */
     ['pointerdown', 'keydown', 'touchstart'].forEach(function (ev) {
-      document.addEventListener(ev, first, { once: true, passive: true });
+      document.addEventListener(ev, first, { passive: true });
     });
   }
 
-  function first() {
+  function first(e) {
+    /* A tap on the button itself is the button's business. Handling it here
+       too would start playback and let the click handler immediately pause it
+       again, so one tap would appear to do nothing. */
+    if (e && e.target && btn.contains(e.target)) return;
     ['pointerdown', 'keydown', 'touchstart'].forEach(function (ev) {
       document.removeEventListener(ev, first);
     });

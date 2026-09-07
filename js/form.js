@@ -35,14 +35,12 @@
      Answer-dependent bits, RSVP page only
      --------------------------------------------------------- */
   var awayNote   = document.getElementById('awayNote');
-  var laterNote  = document.getElementById('laterNote');
   var guestField = document.getElementById('guestsField');
 
   if (guestField) guestField.hidden = true;
   [].forEach.call(form.querySelectorAll('input[name=attending]'), function (radio) {
     radio.addEventListener('change', function () {
       if (awayNote)  awayNote.hidden  = (radio.value !== 'no');
-      if (laterNote) laterNote.hidden = (radio.value !== 'maybe');
       /* A head count is meaningless until they have said yes, and asking for
          one is a small nag at the worst possible moment. */
       if (guestField) guestField.hidden = (radio.value !== 'yes');
