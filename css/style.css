@@ -292,8 +292,9 @@ body{
 }
 .cta.ghost:hover{ background:rgba(255,255,255,.08); box-shadow:none; }
 .choose-note{
-  margin:6px 0 0; text-align:center; line-height:1.6;
+  margin:6px 0 0; text-align:center; line-height:1.85;
   color:var(--ink-dim); font-size:.95rem;
+  text-wrap:balance;
 }
 
 /* ============ PANELS ============ */
