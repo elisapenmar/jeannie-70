@@ -300,6 +300,41 @@ body{
 .cta:hover{ transform:translateY(-2px); box-shadow:0 12px 42px rgba(255,79,163,.5), 0 0 0 1px rgba(255,255,255,.6) inset; }
 .cta:active{ transform:translateY(0); }
 
+/* ============ LYRICS ============ */
+
+.panel.slim{ padding-top:0; padding-bottom:0; }
+
+.lyrics{
+  border:1px solid rgba(255,255,255,.12); border-radius:16px;
+  background:rgba(255,255,255,.03); overflow:hidden;
+}
+.lyrics summary{
+  list-style:none; cursor:pointer;
+  padding:16px 20px;
+  display:flex; align-items:center; justify-content:center; gap:10px;
+  font-size:.74rem; letter-spacing:.22em; text-transform:uppercase;
+  color:var(--gold);
+  transition:background .15s ease;
+}
+.lyrics summary::-webkit-details-marker{ display:none; }
+.lyrics summary::after{
+  content:""; width:7px; height:7px; margin-top:-4px;
+  border-right:1.5px solid currentColor; border-bottom:1.5px solid currentColor;
+  transform:rotate(45deg); transition:transform .2s ease;
+}
+.lyrics[open] summary::after{ transform:rotate(-135deg); margin-top:3px; }
+.lyrics summary:hover{ background:rgba(255,255,255,.05); }
+.lyrics summary:focus-visible{ outline:2px solid var(--pink); outline-offset:-2px; }
+
+.sheet{ padding:4px 20px 26px; text-align:center; }
+.stanza{ margin:0 0 22px; }
+.stanza:last-child{ margin-bottom:0; }
+.stanza .tag{
+  margin:0 0 7px; font-size:.62rem; letter-spacing:.24em;
+  text-transform:uppercase; color:var(--ink-dim); opacity:.65;
+}
+.stanza .lines{ margin:0; line-height:1.85; font-weight:300; }
+
 /* ============ FORM ============ */
 
 .form{ display:grid; gap:22px; }
