@@ -218,6 +218,12 @@
         'writing their own? Come back to this page any time before ' +
         '<strong>Saturday, December 19</strong>, when the book goes to be printed.</p>';
 
+      var rsvp = document.createElement('p');
+      rsvp.className = 'note';
+      rsvp.innerHTML = 'Not yet said whether you can come? ' +
+                       '<a href="rsvp.html">Answer the invitation</a>.';
+      panel.appendChild(rsvp);
+
       [['Send something else', true], ['Add someone else’s memory', false]]
         .forEach(function (pair) {
           var b = document.createElement('button');
