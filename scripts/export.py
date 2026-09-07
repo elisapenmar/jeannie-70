@@ -189,10 +189,17 @@ def main():
                 try:
                     blob = get("/storage/v1/object/" + BUCKET + "/" +
                                urllib.parse.quote(path), key, binary=True)
+                    # The write is inside the try too. Google Drive's virtual
+                    # filesystem can refuse a write that a local disk would
+                    # take, and a download that succeeded then died on the way
+                    # to disk used to abort the whole run.
+                    out.parent.mkdir(parents=True, exist_ok=True)
+                    tmp = out.with_name(out.name + ".part")
+                    tmp.write_bytes(blob)
+                    os.replace(tmp, out)      # atomic: no half-written photo
                 except Exception as e:                  # noqa: BLE001
-                    # Anything at all: one unreachable file must not abort the
-                    # run and strand every file after it, which is exactly what
-                    # a bare HTTPError catch let happen.
+                    # Anything at all: one bad file must not strand every file
+                    # behind it, which is what a bare HTTPError catch allowed.
                     detail = ""
                     if isinstance(e, urllib.error.HTTPError):
                         try:
@@ -201,11 +208,6 @@ def main():
                             pass
                     failures.append(f"{path}\n      {type(e).__name__}: {e}{detail}")
                     continue
-                # Only now, once the bytes are actually in hand. Creating the
-                # folder first is what left an empty photos/ sitting there
-                # looking like the download had worked.
-                out.parent.mkdir(parents=True, exist_ok=True)
-                out.write_bytes(blob)
                 got += 1
 
     print(f"{len(people)} people, {len(rows)} submissions, {coming} expected")
