@@ -5,9 +5,9 @@
   'use strict';
 
   /* Tempo, measured off audio/party.mp3 by autocorrelating its onset
-     envelope: 126 BPM, and the peak was unambiguous. Everything that flashes
-     is locked to this, so the room pulses with the song. */
-  var BPM  = 126;
+     envelope: 127.5 BPM. Everything that flashes is locked to this, so the
+     room pulses with the song. */
+  var BPM  = 127.5;
   var BEAT = 60000 / BPM;
   document.documentElement.style.setProperty('--beat', (BEAT / 1000).toFixed(3) + 's');
 

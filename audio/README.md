@@ -1,8 +1,12 @@
-Drop the song here as `party.mp3`.
+`party.m4a` is generated, not hand-placed. To rebuild it from a new recording:
 
-MP3 is what the page expects. It is the one format every browser plays; OGG and
-WebM are unreliable in Safari, which is most of the guests. Aim under about 5 MB
-(128-192 kbps gets a 3-4 minute track there).
+    python3 scripts/make-audio.py "/path/to/song.mp3"
 
-The play/pause control hides itself if this file is missing, so the page is
-correct before the song exists.
+That trims to 1:45 and fades the last seven seconds, because the full track
+outstays its welcome on a page people are reading. It also prints the tempo,
+which belongs in `BPM` at the top of `js/disco.js` so the mirror ball flashes
+in time.
+
+AAC rather than mp3 because macOS decodes mp3 but will not encode it, and a
+fade cannot be applied without re-encoding. Every browser these guests will
+use plays AAC. The player hides itself if this file is missing.

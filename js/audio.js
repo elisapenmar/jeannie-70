@@ -4,7 +4,7 @@
 (function () {
   'use strict';
 
-  var SRC = 'audio/party.mp3';
+  var SRC = 'audio/party.m4a';
   var KEY = 'party70-audio';
 
   var btn = document.getElementById('music');
