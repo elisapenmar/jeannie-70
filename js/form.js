@@ -236,9 +236,8 @@
     if (KIND === 'rsvp') {
       panel.innerHTML =
         '<p class="big">Got it. Thank you.</p>' +
-        '<p>While you&rsquo;re here: we&rsquo;re quietly gathering memories, ' +
-        'photographs and songs to bind into a book for her birthday. ' +
-        'It would not be the same without yours.</p>';
+        '<p>You can still be included! Write a message or share a memory ' +
+        'that will be printed in a book for her.</p>';
       var go = document.createElement('a');
       go.className = 'cta';
       go.href = 'memories.html';
