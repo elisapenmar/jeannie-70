@@ -70,8 +70,9 @@
 <section class="panel" id="rsvp">
   <h2 class="chrome">RSVP</h2>
   <p class="lede">
-    Two things: let us know if you can make it &mdash; and help us surprise her.
-    We&rsquo;re collecting memories and photos to bind into a book for her birthday.
+    Let us know if you can make it &mdash; and then help us with the surprise.
+    We&rsquo;re gathering memories, messages and photographs to bind into a book
+    for her. Fill in as much or as little as you like; every piece of it goes in.
   </p>
 
   <form class="form" id="rsvpForm" novalidate>
@@ -103,16 +104,35 @@
 
     <label class="field">
       <span>A memory of her <em>(any length &mdash; a sentence or a whole story)</em></span>
-      <textarea name="memory" rows="7" placeholder="The first time I met her&hellip;"></textarea>
+      <p class="hint">
+        Tell us what happened &mdash; and, if you can, why it has stayed with you.
+        It might be a day you&rsquo;ve never forgotten, something she taught you,
+        or the part she has played in your life.
+      </p>
+      <textarea name="memory" rows="8" placeholder="I&rsquo;ll never forget the time&hellip;"></textarea>
+    </label>
+
+    <label class="field">
+      <span>What she means to you <em>(she will read this)</em></span>
+      <p class="hint">
+        A separate thing from the memory: this one is addressed straight to her.
+        Say the thing you&rsquo;d want her to know.
+      </p>
+      <textarea name="message" rows="6" placeholder="What I want you to know is&hellip;"></textarea>
     </label>
 
     <div class="field">
       <span>Photos <em>(with her, or ones you&rsquo;d like her to have)</em></span>
+      <p class="hint">
+        On a phone this opens your camera roll &mdash; pick as many as you like.
+        Old photographs are welcome too: a snapshot of a print works perfectly well.
+      </p>
       <label class="drop" for="photos">
         <strong>Choose photos</strong>
-        <small>JPG, PNG or HEIC &middot; as many as you like</small>
+        <small>Straight from your phone &middot; JPG, PNG, HEIC</small>
       </label>
-      <input id="photos" type="file" name="photos" accept="image/*" multiple hidden>
+      <input id="photos" type="file" name="photos"
+             accept="image/*,.heic,.heif" multiple hidden>
       <div class="thumbs" id="thumbs"></div>
     </div>
 

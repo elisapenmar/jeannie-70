@@ -270,6 +270,10 @@ body{
   font-size:.74rem; letter-spacing:.19em; text-transform:uppercase; color:var(--gold);
 }
 .field em{ font-style:normal; text-transform:none; letter-spacing:.02em; color:var(--ink-dim); }
+.hint{
+  margin:-2px 0 2px; font-size:.92rem; line-height:1.55;
+  color:var(--ink-dim); font-weight:300;
+}
 
 input[type=text], input[type=email], input[type=number], textarea{
   width:100%; padding:14px 15px;
