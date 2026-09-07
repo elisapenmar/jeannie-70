@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Pull every RSVP, memory, message and uploaded file down to a local folder.
+"""Pull every RSVP, memory, song request and uploaded file down to a local folder.
 
 Run this whenever you want a fresh copy of what guests have sent in. It is safe
 to run repeatedly — files already downloaded are skipped, so it only fetches
@@ -85,6 +85,7 @@ def main():
                 r["name"], r.get("email") or "",
                 ATTENDING.get(r["attending"], r["attending"]),
                 r["guests"], len(r["photo_paths"]), len(r["doc_paths"]),
+                "yes" if r.get("songs") else "",
                 r["created_at"][:16].replace("T", " "),
             ])
 
@@ -102,6 +103,15 @@ def main():
             if r["photo_paths"]:
                 fh.write(f"*{len(r['photo_paths'])} photo(s) in `{folder_name(r['name'], r['id'])}/`*\n\n")
             fh.write("---\n\n")
+
+    # --- the playlist ---------------------------------------------------
+    requested = [r for r in rows if r.get("songs")]
+    if requested:
+        with open(dest / "song-requests.md", "w", encoding="utf-8") as fh:
+            fh.write("# Songs for the dance floor\n\n")
+            fh.write(f"Requested by {len(requested)} of {len(rows)} guests.\n\n")
+            for r in requested:
+                fh.write(f"**{r['name']}**\n\n{r['songs'].strip()}\n\n")
 
     # --- the files ------------------------------------------------------
     got = skipped = failed = 0

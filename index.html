@@ -71,8 +71,11 @@
   <h2 class="chrome">RSVP</h2>
   <p class="lede">
     Let us know if you can make it &mdash; and then help us with the surprise.
-    We&rsquo;re gathering memories, messages and photographs to bind into a book
-    for her. Fill in as much or as little as you like; every piece of it goes in.
+    We&rsquo;re gathering memories, photographs and songs to bind into a book
+    for her. <strong>Please send those even if you can&rsquo;t be there</strong>
+    &mdash; the book is the part of this that shouldn&rsquo;t miss anyone, and
+    distance is no reason to be left out of it. Fill in as much or as little as
+    you like; every piece of it goes in.
   </p>
 
   <form class="form" id="rsvpForm" novalidate>
@@ -93,6 +96,11 @@
         <label><input type="radio" name="attending" value="no"><span>Can&rsquo;t make it</span></label>
         <label><input type="radio" name="attending" value="maybe"><span>Not sure yet</span></label>
       </div>
+      <p class="hint away" id="awayNote" hidden>
+        We&rsquo;re sorry to miss you &mdash; but please do carry on down the page.
+        A memory, a photograph and a song from you would mean just as much in her
+        book as it would from anyone standing in the room.
+      </p>
     </fieldset>
 
     <label class="field">
@@ -144,6 +152,17 @@
              accept="image/*,.heic,.heif" multiple hidden>
       <div class="thumbs" id="thumbs"></div>
     </div>
+
+    <label class="field">
+      <span>Songs for the dance floor</span>
+      <p class="hint">
+        Is there something we should play that reminds you of her? Put it here.
+        One song or a whole list &mdash; as many as you like, in whatever order
+        they come to you.
+      </p>
+      <textarea name="songs" rows="4"
+                placeholder="Dancing Queen &mdash; she had it on every Sunday morning&hellip;"></textarea>
+    </label>
 
     <button class="cta submit" type="submit">Send it in</button>
     <p class="note" id="formNote" role="status" aria-live="polite"></p>

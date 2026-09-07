@@ -77,6 +77,16 @@
     renderDocs();
   });
 
+  /* Say it again at the moment it matters: someone who has just tapped
+     "can't make it" is the person most likely to assume the rest isn't
+     for them, and they are exactly who we want to hear from. */
+  var awayNote = document.getElementById('awayNote');
+  [].forEach.call(form.querySelectorAll('input[name=attending]'), function (radio) {
+    radio.addEventListener('change', function () {
+      if (awayNote) awayNote.hidden = (radio.value !== 'no');
+    });
+  });
+
   /* ---------------------------------------------------------
      Shrink photos in the browser before they go up
      --------------------------------------------------------- */
@@ -217,6 +227,7 @@
           attending:   data.get('attending'),
           guests:      parseInt(data.get('guests'), 10) || 0,
           memory:      (data.get('memory') || '').trim() || null,
+          songs:       (data.get('songs')  || '').trim() || null,
           photo_paths: photoPaths,
           doc_paths:   docPaths
         })

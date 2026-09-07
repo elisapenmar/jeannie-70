@@ -278,6 +278,11 @@ body{
 /* the written-memory upload is an alternative route to the box above it,
    not another thing being asked for on top */
 .field.alt{ margin-top:-6px; padding-left:14px; border-left:1px solid rgba(255,255,255,.12); }
+.hint.away{
+  margin:10px 0 0; padding:12px 14px;
+  border-radius:12px; background:rgba(255,215,106,.09);
+  border:1px solid rgba(255,215,106,.28); color:var(--ink);
+}
 .or{
   margin:0 0 2px; font-size:.74rem; letter-spacing:.24em;
   text-transform:uppercase; color:var(--gold); opacity:.85;

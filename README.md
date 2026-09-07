@@ -32,6 +32,14 @@ to avoid the $10/month a third project would cost. Everything is namespaced
 - table `public.party70_rsvps` — one row per guest
 - bucket `party70` — private, 25 MB a file, photos and documents
 
+The memory is a single free-text field on purpose. A memory and what she means
+to someone are the same breath for most people, and splitting them made guests
+pick. The document upload sits right beside that box as the other route to the
+same thing: type it here, or draft it properly and come back and upload it.
+
+The form says plainly, and again when someone taps "can't make it", that the
+memory, photographs and song are wanted whether or not they can be there.
+
 Guests are anonymous and never sign in. The key in `js/config.js` is
 publishable and deliberately public: row-level security lets anonymous callers
 only INSERT a row and upload into the bucket. They cannot read back, edit or
@@ -53,10 +61,11 @@ has been exported and the book is done.
 Writes into the Google Drive folder, next to the other party material:
 
     submissions/
-      rsvps.csv        the guest list and head count
-      memories.md      every memory and message, in one readable document
-      <Name>/photos/   their photographs
-      <Name>/documents/
+      rsvps.csv          the guest list and head count
+      memories.md        every memory, in one readable document
+      song-requests.md   the playlist, with who asked for what
+      <Name>/photos/     their photographs
+      <Name>/documents/  written memories they uploaded instead of typing
 
 Safe to re-run; it skips files already downloaded. No dependencies to install.
 
