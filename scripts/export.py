@@ -18,11 +18,13 @@ party material. Pass a different destination as the first argument.
 """
 
 import csv
+import datetime
 import json
 import os
 import pathlib
 import re
 import sys
+import traceback
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -37,6 +39,25 @@ DEFAULT_DEST = pathlib.Path(
 )
 
 ATTENDING = {"yes": "Coming", "no": "Can't come", "maybe": "Will confirm later"}
+
+
+LOG = []
+
+
+def say(line=""):
+    """Print it, and keep it, so a run can be read back afterwards."""
+    print(line)
+    LOG.append(str(line))
+
+
+def write_log(dest):
+    try:
+        dest.mkdir(parents=True, exist_ok=True)
+        (dest / "_last-run.log").write_text(
+            datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S") + "\n\n"
+            + "\n".join(LOG) + "\n")
+    except Exception:
+        pass
 
 
 def get(path, key, binary=False):
@@ -85,7 +106,7 @@ def main():
         sys.exit(f"Could not read submissions ({e.code}). Is the service key right?\n{e.read().decode()[:300]}")
 
     if not rows:
-        print("No submissions yet.")
+        say("No submissions yet.")
         return
 
     # People are told they can answer now and send photos later, so one guest
@@ -206,18 +227,27 @@ def main():
                             detail = " " + e.read().decode()[:200]
                         except Exception:
                             pass
-                    failures.append(f"{path}\n      {type(e).__name__}: {e}{detail}")
+                    failures.append(f"{path}\n      {type(e).__name__}: {e}{detail}\n"
+                                    + "      " + traceback.format_exc().replace("\n", "\n      "))
                     continue
                 got += 1
 
-    print(f"{len(people)} people, {len(rows)} submissions, {coming} expected")
-    print(f"files: {got} downloaded, {skipped} already had, {len(failures)} failed")
+    say(f"{len(people)} people, {len(rows)} submissions, {coming} expected")
+    say(f"files: {got} downloaded, {skipped} already had, {len(failures)} failed")
     if failures:
-        print("\n  COULD NOT FETCH:")
+        say("\n  COULD NOT FETCH:")
         for f in failures:
-            print("    " + f)
-    print(f"\n{dest}")
+            say("    " + f)
+    say(f"\n{dest}")
+    write_log(dest)
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except SystemExit:
+        raise
+    except Exception:
+        say("\nTHE RUN STOPPED EARLY:\n" + traceback.format_exc())
+        write_log(DEFAULT_DEST if len(sys.argv) < 2 else pathlib.Path(sys.argv[1]))
+        raise
