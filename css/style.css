@@ -431,6 +431,13 @@ textarea{ resize:vertical; line-height:1.6; }
   color:var(--gold);
 }
 .thanks p{ margin:0; color:var(--ink-dim); line-height:1.6; }
+.cta.again{
+  margin-top:10px; font-size:.82rem; padding:14px 22px;
+  background:none; color:var(--ink);
+  border:1px solid rgba(255,255,255,.3); box-shadow:none; animation:none;
+}
+.cta.again:hover{ background:rgba(255,255,255,.07); box-shadow:none; }
+.sendnote{ text-align:center; margin:0; }
 
 .foot{
   position:relative; z-index:2; text-align:center;

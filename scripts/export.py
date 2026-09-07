@@ -49,10 +49,11 @@ def get(path, key, binary=False):
     return raw if binary else json.loads(raw)
 
 
-def folder_name(name, uid):
-    """A readable per-guest folder, kept unique by a slice of the row id."""
-    stem = re.sub(r"[^A-Za-z0-9 ]+", "", name or "").strip() or "unnamed"
-    return f"{stem[:48]} ({uid[:8]})"
+def folder_name(subs):
+    """One readable folder per person, however many times they sent something."""
+    last = subs[-1]
+    stem = re.sub(r"[^A-Za-z0-9 ]+", "", last["name"] or "").strip() or "unnamed"
+    return f"{stem[:48]} ({last['id'][:8]})"
 
 
 def main():
@@ -76,68 +77,95 @@ def main():
         print("No submissions yet.")
         return
 
-    # --- the guest list -------------------------------------------------
+    # People are told they can answer now and send photos later, so one guest
+    # may appear as several rows. Merge them, or the same person ends up
+    # scattered across half a dozen folders. Email identifies them where we
+    # have it, since a name gets typed differently each time.
+    people = {}
+    for r in rows:
+        key = (r.get("email") or "").strip().lower() or r["name"].strip().lower()
+        people.setdefault(key, []).append(r)
+
+    def newest(subs):
+        return subs[-1]          # rows arrive oldest first
+
+    # --- the guest list, one line per person -----------------------------
     with open(dest / "rsvps.csv", "w", newline="", encoding="utf-8") as fh:
         w = csv.writer(fh)
-        w.writerow(["Name", "Email", "Attending", "Party size", "Photos", "Documents", "Submitted"])
-        for r in rows:
+        w.writerow(["Name", "Email", "Attending", "Party size", "Photos",
+                    "Documents", "Songs", "Submissions", "First heard", "Last heard"])
+        for subs in people.values():
+            last = newest(subs)
             w.writerow([
-                r["name"], r.get("email") or "",
-                ATTENDING.get(r["attending"], r["attending"]),
-                r["guests"], len(r["photo_paths"]), len(r["doc_paths"]),
-                "yes" if r.get("songs") else "",
-                r["created_at"][:16].replace("T", " "),
+                last["name"], last.get("email") or "",
+                ATTENDING.get(last["attending"], last["attending"]),
+                last["guests"],
+                sum(len(r["photo_paths"]) for r in subs),
+                sum(len(r["doc_paths"]) for r in subs),
+                "yes" if any(r.get("songs") for r in subs) else "",
+                len(subs),
+                subs[0]["created_at"][:10],
+                last["created_at"][:10],
             ])
 
-    coming = sum(r["guests"] for r in rows if r["attending"] == "yes")
+    coming = sum(newest(s)["guests"] for s in people.values()
+                 if newest(s)["attending"] == "yes")
 
-    # --- everything written, in one readable document -------------------
+    # --- everything written, in one readable document --------------------
     with open(dest / "memories.md", "w", encoding="utf-8") as fh:
-        fh.write("# Memories and messages\n\n")
-        fh.write(f"{len(rows)} submissions · {coming} people expected\n\n---\n\n")
-        for r in rows:
-            if not r.get("memory"):
+        fh.write("# Memories\n\n")
+        fh.write(f"{len(people)} people, {len(rows)} submissions, "
+                 f"{coming} expected on the night\n\n---\n\n")
+        for subs in people.values():
+            written = [r for r in subs if r.get("memory")]
+            if not written:
                 continue
-            fh.write(f"## {r['name']}\n\n")
-            fh.write(f"{r['memory'].strip()}\n\n")
-            if r["photo_paths"]:
-                fh.write(f"*{len(r['photo_paths'])} photo(s) in `{folder_name(r['name'], r['id'])}/`*\n\n")
+            fh.write(f"## {newest(subs)['name']}\n\n")
+            for r in written:
+                if len(written) > 1:
+                    fh.write(f"*sent {r['created_at'][:10]}*\n\n")
+                fh.write(f"{r['memory'].strip()}\n\n")
+            photos = sum(len(r["photo_paths"]) for r in subs)
+            if photos:
+                fh.write(f"*{photos} photo(s) in `{folder_name(subs)}/`*\n\n")
             fh.write("---\n\n")
 
-    # --- the playlist ---------------------------------------------------
-    requested = [r for r in rows if r.get("songs")]
-    if requested:
+    # --- the playlist ----------------------------------------------------
+    asked = [s for s in people.values() if any(r.get("songs") for r in s)]
+    if asked:
         with open(dest / "song-requests.md", "w", encoding="utf-8") as fh:
             fh.write("# Songs for the dance floor\n\n")
-            fh.write(f"Requested by {len(requested)} of {len(rows)} guests.\n\n")
-            for r in requested:
-                fh.write(f"**{r['name']}**\n\n{r['songs'].strip()}\n\n")
+            fh.write(f"Asked for by {len(asked)} of {len(people)} people.\n\n")
+            for subs in asked:
+                fh.write(f"**{newest(subs)['name']}**\n\n")
+                for r in subs:
+                    if r.get("songs"):
+                        fh.write(f"{r['songs'].strip()}\n\n")
 
-    # --- the files ------------------------------------------------------
+    # --- the files, one folder per person --------------------------------
     got = skipped = failed = 0
-    for r in rows:
-        files = [("photos", p) for p in r["photo_paths"]] + \
-                [("documents", p) for p in r["doc_paths"]]
-        if not files:
-            continue
-        person = dest / folder_name(r["name"], r["id"])
-        for kind, path in files:
-            out = person / kind / pathlib.Path(path).name
-            if out.exists():
-                skipped += 1
-                continue
-            out.parent.mkdir(parents=True, exist_ok=True)
-            try:
-                blob = get("/storage/v1/object/" + BUCKET + "/" +
-                           urllib.parse.quote(path), key, binary=True)
-            except urllib.error.HTTPError as e:
-                print(f"  ! could not fetch {path} ({e.code})")
-                failed += 1
-                continue
-            out.write_bytes(blob)
-            got += 1
+    for subs in people.values():
+        person = dest / folder_name(subs)
+        for r in subs:
+            files = [("photos", p) for p in r["photo_paths"]] + \
+                    [("documents", p) for p in r["doc_paths"]]
+            for kind, path in files:
+                out = person / kind / pathlib.Path(path).name
+                if out.exists():
+                    skipped += 1
+                    continue
+                out.parent.mkdir(parents=True, exist_ok=True)
+                try:
+                    blob = get("/storage/v1/object/" + BUCKET + "/" +
+                               urllib.parse.quote(path), key, binary=True)
+                except urllib.error.HTTPError as e:
+                    print(f"  ! could not fetch {path} ({e.code})")
+                    failed += 1
+                    continue
+                out.write_bytes(blob)
+                got += 1
 
-    print(f"{len(rows)} submissions · {coming} people expected")
+    print(f"{len(people)} people, {len(rows)} submissions, {coming} expected")
     print(f"files: {got} downloaded, {skipped} already had, {failed} failed")
     print(f"\n{dest}")
 

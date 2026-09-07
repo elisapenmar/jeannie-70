@@ -154,6 +154,50 @@
     note.className = 'note' + (kind ? ' ' + kind : '');
   }
 
+
+  /* Nothing has to arrive in one go: someone can answer today and send photos
+     next week. So the thank-you offers a way straight back in, and keeps their
+     name, address and answer filled in — a second trip should cost them the
+     new thing only, not everything they already typed. */
+  function thankThem() {
+    var panel = document.createElement('div');
+    panel.className = 'thanks';
+    panel.innerHTML =
+      '<p class="big">Got it. Thank you.</p>' +
+      '<p>That is safely in the pile now, and it will reach her.</p>' +
+      '<p>Thought of something else, or still hunting for a photograph? ' +
+      'Come back to this page whenever you like. There is no closing date.</p>';
+
+    var again = document.createElement('button');
+    again.type = 'button';
+    again.className = 'cta again';
+    again.textContent = 'Send something else';
+    again.addEventListener('click', function () {
+      panel.remove();
+      form.hidden = false;
+
+      /* clear only what was actually sent; identity stays put */
+      form.memory.value = '';
+      form.songs.value  = '';
+      pickedPhotos = [];
+      pickedDocs   = [];
+      renderThumbs();
+      renderDocs();
+
+      busy = false;
+      button.disabled = false;
+      button.textContent = 'Send it in';
+      say('');
+      form.memory.focus({ preventScroll: true });
+      form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    panel.appendChild(again);
+    form.hidden = true;
+    form.parentNode.insertBefore(panel, form.nextSibling);
+    panel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
   /* ---------------------------------------------------------
      Submit
      --------------------------------------------------------- */
@@ -234,12 +278,7 @@
       });
     }).then(function (r) {
       if (!r.ok) return r.text().then(function (t) { throw new Error('Save failed (' + r.status + '): ' + t); });
-      form.innerHTML =
-        '<div class="thanks">' +
-          '<p class="big">Got it. Thank you.</p>' +
-          '<p>Your memory is safely in the pile. She is going to love this.</p>' +
-        '</div>';
-      document.getElementById('rsvp').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      thankThem();
     }).catch(function (err) {
       busy = false;
       button.disabled = false;
