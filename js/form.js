@@ -255,7 +255,7 @@
         '<p>That is safely in the pile now, and it will reach her.</p>' +
         '<p>Still hunting for a photograph, or is someone else in the house ' +
         'writing their own? Come back to this page any time before ' +
-        '<strong>Saturday, December 19</strong>, when the book goes to be printed.</p>';
+        '<strong>Saturday, December 19</strong>.</p>';
 
       var rsvp = document.createElement('p');
       rsvp.className = 'note';
