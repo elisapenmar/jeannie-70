@@ -176,7 +176,7 @@
     var total = pickedPhotos.length + pickedDocs.length, done = 0;
 
     function progress() {
-      if (total) say('Uploading — ' + done + ' of ' + total + ' file' + (total === 1 ? '' : 's') + '…');
+      if (total) say('Uploading ' + done + ' of ' + total + ' file' + (total === 1 ? '' : 's') + '…');
       else say('Sending…');
     }
     progress();
@@ -236,7 +236,7 @@
       if (!r.ok) return r.text().then(function (t) { throw new Error('Save failed (' + r.status + '): ' + t); });
       form.innerHTML =
         '<div class="thanks">' +
-          '<p class="big">Got it — thank you.</p>' +
+          '<p class="big">Got it. Thank you.</p>' +
           '<p>Your memory is safely in the pile. She is going to love this.</p>' +
         '</div>';
       document.getElementById('rsvp').scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -244,8 +244,8 @@
       busy = false;
       button.disabled = false;
       button.textContent = 'Send it in';
-      say('That didn’t go through — ' + err.message +
-          ' Please try again, or send it straight to [YOUR EMAIL].', 'error');
+      say('That didn’t go through. ' + err.message +
+          ' Please try again, or text it to Elisa on (818) 648-8023.', 'error');
     });
   });
 
