@@ -170,30 +170,50 @@ def main():
                         fh.write(f"{r['songs'].strip()}\n\n")
 
     # --- the files, one folder per person --------------------------------
-    got = skipped = failed = 0
+    got = skipped = 0
+    failures = []
     for subs in people.values():
         person = dest / folder_name(subs)
         for r in subs:
             files = [("photos", p) for p in r["photo_paths"]] + \
                     [("documents", p) for p in r["doc_paths"]]
             for kind, path in files:
-                out = person / kind / pathlib.Path(path).name
-                if out.exists():
+                # Two submissions from one person can both hold a "001-IMG_1234.jpg";
+                # without the submission id the second would silently overwrite,
+                # or be skipped as already present, and a photograph would vanish.
+                stem = pathlib.Path(path).name
+                out = person / kind / f"{r['id'][:8]}-{stem}"
+                if out.exists() and out.stat().st_size > 0:
                     skipped += 1
                     continue
-                out.parent.mkdir(parents=True, exist_ok=True)
                 try:
                     blob = get("/storage/v1/object/" + BUCKET + "/" +
                                urllib.parse.quote(path), key, binary=True)
-                except urllib.error.HTTPError as e:
-                    print(f"  ! could not fetch {path} ({e.code})")
-                    failed += 1
+                except Exception as e:                  # noqa: BLE001
+                    # Anything at all: one unreachable file must not abort the
+                    # run and strand every file after it, which is exactly what
+                    # a bare HTTPError catch let happen.
+                    detail = ""
+                    if isinstance(e, urllib.error.HTTPError):
+                        try:
+                            detail = " " + e.read().decode()[:200]
+                        except Exception:
+                            pass
+                    failures.append(f"{path}\n      {type(e).__name__}: {e}{detail}")
                     continue
+                # Only now, once the bytes are actually in hand. Creating the
+                # folder first is what left an empty photos/ sitting there
+                # looking like the download had worked.
+                out.parent.mkdir(parents=True, exist_ok=True)
                 out.write_bytes(blob)
                 got += 1
 
     print(f"{len(people)} people, {len(rows)} submissions, {coming} expected")
-    print(f"files: {got} downloaded, {skipped} already had, {failed} failed")
+    print(f"files: {got} downloaded, {skipped} already had, {len(failures)} failed")
+    if failures:
+        print("\n  COULD NOT FETCH:")
+        for f in failures:
+            print("    " + f)
     print(f"\n{dest}")
 
 
