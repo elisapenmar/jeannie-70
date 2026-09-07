@@ -28,7 +28,17 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Monoton&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=10">
+<link rel="stylesheet" href="css/style.css?v=11">
+<script>
+/* Set before anything paints, so a calm visitor never catches a flash of the
+   full disco. Honours the system preference until they choose for themselves. */
+try {
+  var c = localStorage.getItem('party70-calm');
+  if (c === '1' || (c === null && matchMedia('(prefers-reduced-motion: reduce)').matches)) {
+    document.documentElement.className = 'calm';
+  }
+} catch (e) {}
+</script>
 </head>
 <body>
 
@@ -37,7 +47,6 @@
 <div class="lights" id="lights" aria-hidden="true"></div>
 <div class="grain" aria-hidden="true"></div>
 
-<button class="music" id="music" type="button" hidden aria-label="Play the music"></button>
 
 
 <!-- ============ HEADER ============ -->
@@ -96,9 +105,9 @@
 
 <footer class="foot">Made with love and far too many sequins.</footer>
 
-<script src="js/config.js?v=10"></script>
-<script src="js/disco.js?v=10"></script>
-<script src="js/audio.js?v=10"></script>
-<script src="js/form.js?v=10"></script>
+<script src="js/calm.js?v=11"></script>
+<script src="js/config.js?v=11"></script>
+<script src="js/disco.js?v=11"></script>
+<script src="js/form.js?v=11"></script>
 </body>
 </html>

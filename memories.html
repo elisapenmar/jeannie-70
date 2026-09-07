@@ -28,7 +28,17 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Monoton&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=10">
+<link rel="stylesheet" href="css/style.css?v=11">
+<script>
+/* Set before anything paints, so a calm visitor never catches a flash of the
+   full disco. Honours the system preference until they choose for themselves. */
+try {
+  var c = localStorage.getItem('party70-calm');
+  if (c === '1' || (c === null && matchMedia('(prefers-reduced-motion: reduce)').matches)) {
+    document.documentElement.className = 'calm';
+  }
+} catch (e) {}
+</script>
 </head>
 <body>
 
@@ -37,7 +47,6 @@
 <div class="lights" id="lights" aria-hidden="true"></div>
 <div class="grain" aria-hidden="true"></div>
 
-<button class="music" id="music" type="button" hidden aria-label="Play the music"></button>
 
 
 <!-- ============ HEADER ============ -->
@@ -76,7 +85,7 @@
     <label class="field">
       <span>A memory of her, and anything you&rsquo;d like her to know</span>
       <p class="hint">
-        Tell us what happened, and, if you can, why it has stayed with you:
+        Share your memory, and, if you can, why it has stayed with you:
         a day you&rsquo;ve never forgotten, something she taught you, the part she
         has played in your life. And if there&rsquo;s something you&rsquo;d simply
         like her to know, say that here too.
@@ -87,7 +96,7 @@
         know whose words are whose. After you send, there is a button to add
         the next person&rsquo;s.
       </p>
-      <textarea name="memory" rows="11" placeholder="I&rsquo;ll never forget the time&hellip;"></textarea>
+      <textarea name="memory" rows="11"></textarea>
     </label>
 
     <div class="field alt">
@@ -115,7 +124,6 @@
       </p>
       <label class="drop" for="photos">
         <strong>Choose photos</strong>
-        <small>Straight from your phone &middot; JPG, PNG, HEIC</small>
       </label>
       <input id="photos" type="file" name="photos"
              accept="image/*,.heic,.heif" multiple hidden>
@@ -125,11 +133,11 @@
     <label class="field">
       <span>Songs for the dance floor</span>
       <p class="hint">
-        Is there something we should play that reminds you of her? Put it here.
-        One song or a whole list, as many as you like, in whatever order
-        they come to you.
+        Is there something we should play that reminds you of her? Put it here,
+        for example: Dancing Queen, by Abba. One song or a whole list, as many
+        as you like, in whatever order they come to you.
       </p>
-      <textarea name="songs" rows="4" placeholder="Dancing Queen, by Abba"></textarea>
+      <textarea name="songs" rows="4"></textarea>
     </label>
 
     <p class="hint sendnote">
@@ -143,9 +151,9 @@
 
 <footer class="foot">Made with love and far too many sequins.</footer>
 
-<script src="js/config.js?v=10"></script>
-<script src="js/disco.js?v=10"></script>
-<script src="js/audio.js?v=10"></script>
-<script src="js/form.js?v=10"></script>
+<script src="js/calm.js?v=11"></script>
+<script src="js/config.js?v=11"></script>
+<script src="js/disco.js?v=11"></script>
+<script src="js/form.js?v=11"></script>
 </body>
 </html>

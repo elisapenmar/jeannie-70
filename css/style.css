@@ -560,3 +560,84 @@ textarea{ resize:vertical; line-height:1.6; }
   .beams, .lights{ opacity:.3; }
   .star-field i{ opacity:.6; }
 }
+
+
+/* ============================================================
+   CALM VIEW
+   Larger type, and nothing that moves, pulses or flashes.
+   Set on <html> before first paint by the guard in each page's head.
+   ============================================================ */
+
+.calmswitch{
+  position:fixed; z-index:20;
+  top:calc(env(safe-area-inset-top) + 10px); left:12px;
+  display:flex; align-items:center; gap:7px;
+  padding:9px 14px 9px 11px; border-radius:100px; cursor:pointer;
+  border:1px solid rgba(255,255,255,.32);
+  background:rgba(12,8,20,.66); color:var(--ink);
+  -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px);
+  font-family:inherit; font-size:.8rem; font-weight:400; letter-spacing:.04em;
+}
+.calmswitch svg{ width:15px; height:15px; fill:currentColor; display:block; }
+.calmswitch:hover{ background:rgba(30,20,44,.8); }
+.calmswitch:focus-visible{ outline:2px solid var(--pink); outline-offset:2px; }
+
+/* --- everything stops --- */
+.calm .beams,
+.calm .lights,
+.calm .star-field,
+.calm .grain{ display:none !important; }
+
+.calm *,
+.calm *::before,
+.calm *::after{
+  animation:none !important;
+  transition:none !important;
+}
+
+.calm .ball-bloom{ opacity:.45; }
+.calm .floor-glow{ opacity:.55; }
+.calm .seventy{ text-shadow:0 0 10px rgba(255,255,255,.5); }
+.calm .mom img{ filter:none; }
+
+/* the shimmer relies on an animation, so give the fills a fixed value */
+.calm .chrome{
+  background:none; -webkit-background-clip:border-box; background-clip:border-box;
+  color:#f3eeff;
+}
+.calm .cta{
+  background:#ffe7f3; background-size:auto; color:#1a0620;
+  box-shadow:0 4px 18px rgba(0,0,0,.4);
+}
+.calm .cta.ghost,
+.calm .cta.again{ background:none; color:var(--ink); border:1px solid rgba(255,255,255,.45); }
+
+/* --- and everything grows --- */
+.calm body{ font-size:1.12rem; }
+.calm .lede,
+.calm .hint,
+.calm .details dd,
+.calm .choose-note,
+.calm .thanks p{ font-size:1.1rem; line-height:1.75; color:#e6dff5; }
+.calm .field > span,
+.calm .legend,
+.calm .details dt{ font-size:.9rem; letter-spacing:.12em; color:#ffe08a; }
+.calm input[type=text],
+.calm input[type=email],
+.calm input[type=number],
+.calm textarea,
+.calm .choices span{ font-size:1.12rem; }
+.calm .drop strong{ font-size:1.12rem; }
+.calm .note{ font-size:1rem; }
+.calm .back{ font-size:1rem; }
+.calm .eyebrow{ font-size:.9rem; letter-spacing:.22em; }
+.calm .lyrics summary{ font-size:.92rem; }
+.calm .stanza .lines{ font-size:1.12rem; }
+.calm .foot{ font-size:.95rem; }
+
+/* room for the switch above the header on a narrow screen */
+.calm .subhead{ padding-top:calc(env(safe-area-inset-top) + 58px); }
+@media (max-width:520px){
+  .subhead{ padding-top:calc(env(safe-area-inset-top) + 54px); }
+  .calmswitch{ font-size:.75rem; padding:8px 12px 8px 10px; }
+}

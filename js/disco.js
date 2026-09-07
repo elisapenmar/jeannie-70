@@ -11,7 +11,10 @@
   var BEAT = 60000 / BPM;
   document.documentElement.style.setProperty('--beat', (BEAT / 1000).toFixed(3) + 's');
 
-  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  /* Calm view stops the ball too. CSS cannot reach a canvas, so the render
+     loop has to be told. */
+  function calm() { return document.documentElement.classList.contains('calm'); }
+  var reduced = calm() || window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var TAU = Math.PI * 2;
 
   /* deterministic pseudo-random, so the ball looks the same every reload */
@@ -219,6 +222,12 @@
     });
     start();
   }
+
+  window.addEventListener('party70:calm', function (e) {
+    reduced = e.detail.calm || window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduced) { stop(); drawBall(0); }
+    else { start(); }
+  });
 
   var t0;
   window.addEventListener('resize', function () {
