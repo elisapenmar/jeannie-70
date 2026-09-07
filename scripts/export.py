@@ -123,11 +123,15 @@ def main():
     # "bob  smith" still count as the same person coming back.
     people = {}
     for r in rows:
-        who = re.sub(r"[^a-z0-9]+", " ", r["name"].lower()).strip()
-        # NOT `key`: that name holds the API key, and reusing it here silently
-        # replaced the credential with a tuple, so every download after this
-        # loop failed while the table read before it kept working.
-        person_key = ((r.get("email") or "").strip().lower(), who)
+        # Grouped on the name alone. Contact details can no longer serve as the
+        # identifier: someone may RSVP asking to be texted, leaving no email at
+        # all, then send a memory later and give one, and the two must still be
+        # recognised as the same person. Households already differ by name,
+        # which was the only thing the address was doing.
+        #
+        # NOT named `key`: that holds the API key, and shadowing it once
+        # replaced the credential with a tuple and broke every download.
+        person_key = re.sub(r"[^a-z0-9]+", " ", (r["name"] or "").lower()).strip()
         people.setdefault(person_key, []).append(r)
 
     def newest(subs):
@@ -145,15 +149,23 @@ def main():
     # --- the guest list, one line per person -----------------------------
     with open(dest / "rsvps.csv", "w", newline="", encoding="utf-8") as fh:
         w = csv.writer(fh)
-        w.writerow(["Name", "Email", "Attending", "Party size", "Photos",
-                    "Documents", "Songs", "Submissions", "First heard", "Last heard"])
+        w.writerow(["Name", "Attending", "Party size", "Remind by", "Phone",
+                    "Email", "Photos", "Documents", "Songs", "Submissions",
+                    "First heard", "Last heard"])
         for subs in people.values():
             last = newest(subs)
             ans  = answer(subs)
+            # every distinct detail they ever gave, so a merge that should not
+            # have happened is obvious on the page rather than hidden
+            def seen(field):
+                return " / ".join(sorted({(r.get(field) or "").strip()
+                                          for r in subs if (r.get(field) or "").strip()}))
             w.writerow([
-                display_name(subs), last.get("email") or "",
+                display_name(subs),
                 ATTENDING.get(ans["attending"], ans["attending"]) if ans else "No answer yet",
                 (ans or {}).get("guests") or "",
+                (ans or {}).get("reminder_via") or "",
+                seen("phone"), seen("email"),
                 sum(len(r["photo_paths"]) for r in subs),
                 sum(len(r["doc_paths"]) for r in subs),
                 "yes" if any(r.get("songs") for r in subs) else "",

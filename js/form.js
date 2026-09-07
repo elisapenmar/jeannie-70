@@ -35,17 +35,57 @@
      Answer-dependent bits, RSVP page only
      --------------------------------------------------------- */
   var awayNote   = document.getElementById('awayNote');
-  var guestField = document.getElementById('guestsField');
+  var comingOnly = document.getElementById('comingOnly');
+  var phoneField = document.getElementById('phoneField');
+  var emailField = document.getElementById('emailField');
 
-  if (guestField) guestField.hidden = true;
-  [].forEach.call(form.querySelectorAll('input[name=attending]'), function (radio) {
-    radio.addEventListener('change', function () {
-      if (awayNote)  awayNote.hidden  = (radio.value !== 'no');
-      /* A head count is meaningless until they have said yes, and asking for
-         one is a small nag at the worst possible moment. */
-      if (guestField) guestField.hidden = (radio.value !== 'yes');
-    });
-  });
+  function need(field, on) {
+    if (!field) return;
+    var input = field.querySelector('input');
+    if (!input) return;
+    /* A required field that is hidden blocks submission with a validation
+       message nobody can see, so the flag has to come off with the field. */
+    if (on) input.setAttribute('required', '');
+    else    input.removeAttribute('required');
+  }
+
+  function radios(name) {
+    return [].slice.call(form.querySelectorAll('input[name=' + name + ']'));
+  }
+
+  function showContact() {
+    var how = (form.elements.reminder || {}).value || '';
+    if (phoneField) { phoneField.hidden = how !== 'text';  need(phoneField, how === 'text'); }
+    if (emailField) { emailField.hidden = how !== 'email'; need(emailField, how === 'email'); }
+  }
+
+  function answered() {
+    var a = (form.elements.attending || {}).value || '';
+    var coming = a === 'yes';
+
+    if (awayNote) awayNote.hidden = a !== 'no';
+
+    /* Nothing below is worth asking of someone who has just said they cannot
+       come: not a head count, and certainly not how to remind them about an
+       evening they will not be at. */
+    if (comingOnly) {
+      comingOnly.hidden = !coming;
+      radios('reminder').forEach(function (r) {
+        if (coming) r.setAttribute('required', '');
+        else { r.removeAttribute('required'); r.checked = false; }
+      });
+      if (!coming) {
+        if (phoneField) { phoneField.hidden = true; need(phoneField, false); }
+        if (emailField) { emailField.hidden = true; need(emailField, false); }
+      } else {
+        showContact();
+      }
+    }
+  }
+
+  radios('attending').forEach(function (r) { r.addEventListener('change', answered); });
+  radios('reminder').forEach(function (r) { r.addEventListener('change', showContact); });
+  if (comingOnly) answered();
 
   /* ---------------------------------------------------------
      Picked files, memories page only
@@ -324,9 +364,13 @@
          guess, so those columns simply stay null. */
       if (KIND === 'rsvp') {
         row.attending = value('attending');
-        row.guests    = row.attending === 'yes'
-          ? (parseInt(value('guests'), 10) || 1)
-          : null;
+        var coming    = row.attending === 'yes';
+        row.guests    = coming ? (parseInt(value('guests'), 10) || 1) : null;
+        row.reminder_via = coming ? value('reminder') : null;
+        /* Send only the detail matching what they chose, so switching the
+           radio back and forth cannot leave a stale number or address behind. */
+        row.phone = row.reminder_via === 'text'  ? value('phone') : null;
+        row.email = row.reminder_via === 'email' ? value('email') : null;
       }
 
       return fetch(CFG.url + '/rest/v1/' + CFG.table, {

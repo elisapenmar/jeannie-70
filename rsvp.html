@@ -28,7 +28,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Monoton&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=14">
+<link rel="stylesheet" href="css/style.css?v=15">
 <script>
 /* Set before anything paints, so a calm visitor never catches a flash of the
    full disco. Honours the system preference until they choose for themselves. */
@@ -75,11 +75,6 @@ try {
       <input type="text" name="name" autocomplete="name" required>
     </label>
 
-    <label class="field">
-      <span>Email <em>(so we can reach you)</em></span>
-      <input type="email" name="email" autocomplete="email" required>
-    </label>
-
     <fieldset class="field">
       <span class="legend">Can you come?</span>
       <div class="choices">
@@ -93,10 +88,31 @@ try {
       </p>
     </fieldset>
 
-    <label class="field" id="guestsField">
-      <span>How many of you? <em>(including yourself)</em></span>
-      <input type="number" name="guests" min="1" max="12" value="1" inputmode="numeric">
-    </label>
+    <!-- Only worth asking of someone who is actually coming. -->
+    <div id="comingOnly" hidden>
+      <label class="field" id="guestsField">
+        <span>How many of you? <em>(including yourself)</em></span>
+        <input type="number" name="guests" min="1" max="12" value="1" inputmode="numeric">
+      </label>
+
+      <fieldset class="field">
+        <span class="legend">Closer to the day, how should we remind you?</span>
+        <div class="choices">
+          <label><input type="radio" name="reminder" value="text"><span>Text me</span></label>
+          <label><input type="radio" name="reminder" value="email"><span>Email me</span></label>
+        </div>
+      </fieldset>
+
+      <label class="field" id="phoneField" hidden>
+        <span>Your mobile number</span>
+        <input type="tel" name="phone" autocomplete="tel" inputmode="tel">
+      </label>
+
+      <label class="field" id="emailField" hidden>
+        <span>Your email</span>
+        <input type="email" name="email" autocomplete="email">
+      </label>
+    </div>
 
     <button class="cta submit" type="submit">Send my answer</button>
     <p class="note" id="formNote" role="status" aria-live="polite"></p>
@@ -105,9 +121,9 @@ try {
 
 <footer class="foot">Made with love and far too many sequins.</footer>
 
-<script src="js/calm.js?v=14"></script>
-<script src="js/config.js?v=14"></script>
-<script src="js/disco.js?v=14"></script>
-<script src="js/form.js?v=14"></script>
+<script src="js/calm.js?v=15"></script>
+<script src="js/config.js?v=15"></script>
+<script src="js/disco.js?v=15"></script>
+<script src="js/form.js?v=15"></script>
 </body>
 </html>
