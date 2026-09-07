@@ -49,11 +49,22 @@ def get(path, key, binary=False):
     return raw if binary else json.loads(raw)
 
 
+def display_name(subs):
+    """The best spelling of their name, not merely the most recent one.
+
+    Someone typing their name a second time is in a hurry: "bob  smith" beside
+    the "Bob Smith" they typed first. The tidier version is the one that goes
+    on a folder and above their words in the book.
+    """
+    names = [re.sub(r"\s+", " ", (r["name"] or "").strip()) for r in subs]
+    names = [n for n in names if n] or ["unnamed"]
+    return max(names, key=lambda n: (sum(c.isupper() for c in n), len(n)))
+
+
 def folder_name(subs):
     """One readable folder per person, however many times they sent something."""
-    last = subs[-1]
-    stem = re.sub(r"[^A-Za-z0-9 ]+", "", last["name"] or "").strip() or "unnamed"
-    return f"{stem[:48]} ({last['id'][:8]})"
+    stem = re.sub(r"[^A-Za-z0-9 ]+", "", display_name(subs)).strip() or "unnamed"
+    return f"{stem[:48]} ({subs[-1]['id'][:8]})"
 
 
 def main():
@@ -110,7 +121,7 @@ def main():
             last = newest(subs)
             ans  = answer(subs)
             w.writerow([
-                last["name"], last.get("email") or "",
+                display_name(subs), last.get("email") or "",
                 ATTENDING.get(ans["attending"], ans["attending"]) if ans else "No answer yet",
                 (ans or {}).get("guests") or "",
                 sum(len(r["photo_paths"]) for r in subs),
@@ -136,7 +147,7 @@ def main():
             written = [r for r in subs if r.get("memory")]
             if not written:
                 continue
-            fh.write(f"## {newest(subs)['name']}\n\n")
+            fh.write(f"## {display_name(subs)}\n\n")
             for r in written:
                 if len(written) > 1:
                     fh.write(f"*sent {r['created_at'][:10]}*\n\n")
@@ -153,7 +164,7 @@ def main():
             fh.write("# Songs for the dance floor\n\n")
             fh.write(f"Asked for by {len(asked)} of {len(people)} people.\n\n")
             for subs in asked:
-                fh.write(f"**{newest(subs)['name']}**\n\n")
+                fh.write(f"**{display_name(subs)}**\n\n")
                 for r in subs:
                     if r.get("songs"):
                         fh.write(f"{r['songs'].strip()}\n\n")
