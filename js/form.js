@@ -1,26 +1,56 @@
 /* ============================================================
-   form.js — RSVP, memories, and uploads to Supabase storage
+   form.js — drives both forms: rsvp.html and memories.html
+
+   They share a name, an address, an insert and an error path, so they share
+   this file. Everything below is written to cope with a field simply not
+   being on the page.
    ============================================================ */
 (function () {
   'use strict';
 
-  var CFG = window.PARTY70;
+  var CFG  = window.PARTY70;
+  var form = document.getElementById('partyForm');
+  if (!form) return;
 
-  var form   = document.getElementById('rsvpForm');
+  var KIND   = form.dataset.kind;               /* 'rsvp' | 'memory' */
+  var note   = document.getElementById('formNote');
+  var button = form.querySelector('button[type=submit]');
+  var SEND   = button.textContent;
+
   var photos = document.getElementById('photos');
   var thumbs = document.getElementById('thumbs');
   var docs   = document.getElementById('docs');
   var list   = document.getElementById('filelist');
-  var note   = document.getElementById('formNote');
-  var button = form && form.querySelector('button[type=submit]');
-  if (!form) return;
 
   var pickedPhotos = [];
   var pickedDocs   = [];
   var busy = false;
 
+  function say(msg, kind) {
+    note.textContent = msg;
+    note.className = 'note' + (kind ? ' ' + kind : '');
+  }
+
   /* ---------------------------------------------------------
-     Picked-file lists
+     Answer-dependent bits, RSVP page only
+     --------------------------------------------------------- */
+  var awayNote   = document.getElementById('awayNote');
+  var laterNote  = document.getElementById('laterNote');
+  var guestField = document.getElementById('guestsField');
+
+  if (guestField) guestField.hidden = true;
+  [].forEach.call(form.querySelectorAll('input[name=attending]'), function (radio) {
+    radio.addEventListener('change', function () {
+      if (awayNote)  awayNote.hidden  = (radio.value !== 'no');
+      if (laterNote) laterNote.hidden = (radio.value !== 'maybe');
+      /* A head count is meaningless until they have said yes, and asking for
+         one is a small nag at the worst possible moment. */
+      if (guestField) guestField.hidden = (radio.value !== 'yes');
+    });
+  });
+
+  /* ---------------------------------------------------------
+     Picked files, memories page only
      --------------------------------------------------------- */
   function size(n) {
     return n > 1048576 ? (n / 1048576).toFixed(1) + ' MB'
@@ -28,27 +58,28 @@
   }
 
   function renderThumbs() {
+    if (!thumbs) return;
     thumbs.innerHTML = '';
     pickedPhotos.forEach(function (file, i) {
       var fig = document.createElement('figure');
       var img = document.createElement('img');
       img.alt = file.name;
       img.src = URL.createObjectURL(file);
-      img.onload = function () { URL.revokeObjectURL(img.src); };
-      /* HEIC often can't be decoded for display even where it uploads fine */
+      img.onload  = function () { URL.revokeObjectURL(img.src); };
+      /* HEIC frequently cannot be decoded for display even where it uploads */
       img.onerror = function () { fig.classList.add('no-preview'); img.remove(); };
       var rm = document.createElement('button');
       rm.type = 'button';
       rm.setAttribute('aria-label', 'Remove ' + file.name);
       rm.textContent = '×';
       rm.onclick = function () { pickedPhotos.splice(i, 1); renderThumbs(); };
-      fig.appendChild(img);
-      fig.appendChild(rm);
+      fig.appendChild(img); fig.appendChild(rm);
       thumbs.appendChild(fig);
     });
   }
 
   function renderDocs() {
+    if (!list) return;
     list.innerHTML = '';
     pickedDocs.forEach(function (file, i) {
       var row = document.createElement('div');
@@ -59,42 +90,22 @@
       rm.setAttribute('aria-label', 'Remove ' + file.name);
       rm.textContent = '×';
       rm.onclick = function () { pickedDocs.splice(i, 1); renderDocs(); };
-      row.appendChild(label);
-      row.appendChild(rm);
+      row.appendChild(label); row.appendChild(rm);
       list.appendChild(row);
     });
   }
 
-  photos.addEventListener('change', function () {
+  if (photos) photos.addEventListener('change', function () {
     pickedPhotos = pickedPhotos.concat([].slice.call(photos.files));
     photos.value = '';
     renderThumbs();
   });
 
-  docs.addEventListener('change', function () {
+  if (docs) docs.addEventListener('change', function () {
     pickedDocs = pickedDocs.concat([].slice.call(docs.files));
     docs.value = '';
     renderDocs();
   });
-
-  /* Say it again at the moment it matters. Someone who has just tapped "can't
-     make it" is the person most likely to assume the rest isn't for them, and
-     they are exactly who we want to hear from. Someone deferring their answer
-     needs telling that the rest can still go in today. */
-  var awayNote   = document.getElementById('awayNote');
-  var laterNote  = document.getElementById('laterNote');
-  var guestField = document.getElementById('guestsField');
-
-  [].forEach.call(form.querySelectorAll('input[name=attending]'), function (radio) {
-    radio.addEventListener('change', function () {
-      if (awayNote)  awayNote.hidden  = (radio.value !== 'no');
-      if (laterNote) laterNote.hidden = (radio.value !== 'maybe');
-      /* A head count is meaningless until they have actually said yes, and
-         asking for one is a small nag at the worst moment. */
-      if (guestField) guestField.hidden = (radio.value !== 'yes');
-    });
-  });
-  if (guestField) guestField.hidden = true;
 
   /* ---------------------------------------------------------
      Shrink photos in the browser before they go up
@@ -102,25 +113,22 @@
   function shrink(file) {
     return new Promise(function (resolve) {
       if (!/^image\//.test(file.type) || /heic|heif/i.test(file.type)) {
-        return resolve(file);            /* can't decode it here — send as-is */
+        return resolve(file);            /* cannot decode it here: send as-is */
       }
       var url = URL.createObjectURL(file);
       var img = new Image();
-
       img.onerror = function () { URL.revokeObjectURL(url); resolve(file); };
       img.onload = function () {
         URL.revokeObjectURL(url);
         var w = img.naturalWidth, h = img.naturalHeight;
         var scale = Math.min(1, CFG.maxEdge / Math.max(w, h));
         if (scale === 1 && file.size < 1500000) return resolve(file);
-
         try {
           var c = document.createElement('canvas');
           c.width  = Math.round(w * scale);
           c.height = Math.round(h * scale);
           c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
           c.toBlob(function (blob) {
-            /* keep whichever is smaller — re-encoding isn't always a win */
             resolve(blob && blob.size < file.size ? blob : file);
           }, 'image/jpeg', CFG.quality);
         } catch (e) { resolve(file); }
@@ -147,70 +155,81 @@
         'Authorization': 'Bearer ' + CFG.key,
         'Content-Type':  type || 'application/octet-stream'
         /* deliberately no x-upsert: upsert needs an UPDATE policy too, and
-           overwriting is exactly what we don't want — every submission has
-           its own UUID folder, so a collision would mean someone else's
-           photo being replaced. */
+           overwriting is exactly what we don't want. Every submission has its
+           own UUID folder, so a collision would mean replacing someone else's
+           photograph. */
       },
       body: body
     }).then(function (r) {
-      if (!r.ok) return r.text().then(function (t) { throw new Error('Upload failed (' + r.status + '): ' + t); });
+      if (!r.ok) return r.text().then(function (t) {
+        throw new Error('Upload failed (' + r.status + '): ' + t);
+      });
       return path;
     });
   }
 
-  function say(msg, kind) {
-    note.textContent = msg;
-    note.className = 'note' + (kind ? ' ' + kind : '');
-  }
-
-
-  /* Nothing has to arrive in one go: someone can answer today and send photos
-     next week, and a household can send one memory per person. So the
-     thank-you offers two ways back in, and each keeps exactly as much as it
-     should. A second trip must cost only the new thing, or the photograph
-     never arrives. */
-  function reopen(sameperson) {
+  /* ---------------------------------------------------------
+     Thank you, and the ways back in
+     --------------------------------------------------------- */
+  function reopen(samePerson) {
     form.hidden = false;
+    if (form.memory) form.memory.value = '';
+    if (form.songs)  form.songs.value  = '';
+    pickedPhotos = []; pickedDocs = [];
+    renderThumbs(); renderDocs();
 
-    form.memory.value = '';
-    form.songs.value  = '';
-    pickedPhotos = [];
-    pickedDocs   = [];
-    renderThumbs();
-    renderDocs();
-
-    /* A different person in the same house keeps the household's address and
-       answer, but must not inherit the last one's name, or their memory ends
-       up filed under somebody else. */
-    if (!sameperson) form.name.value = '';
+    /* A different person in the same house keeps the household's address, but
+       must not inherit the last one's name, or their memory ends up filed
+       under somebody else. */
+    if (!samePerson) form.name.value = '';
 
     busy = false;
     button.disabled = false;
-    button.textContent = 'Send it in';
+    button.textContent = SEND;
     say('');
     form.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    (sameperson ? form.memory : form.name).focus({ preventScroll: true });
+    ((samePerson && form.memory) ? form.memory : form.name).focus({ preventScroll: true });
   }
 
   function thankThem() {
     var panel = document.createElement('div');
     panel.className = 'thanks';
-    panel.innerHTML =
-      '<p class="big">Got it. Thank you.</p>' +
-      '<p>That is safely in the pile now, and it will reach her.</p>' +
-      '<p>Still hunting for a photograph, or is someone else in the house ' +
-      'writing their own? Come back to this page any time before ' +
-      '<strong>Saturday, December 19</strong>, when the book goes to be printed.</p>';
 
-    [['Send something else', true], ['Add someone else\u2019s memory', false]]
-      .forEach(function (pair) {
-        var b = document.createElement('button');
-        b.type = 'button';
-        b.className = 'cta again';
-        b.textContent = pair[0];
-        b.addEventListener('click', function () { panel.remove(); reopen(pair[1]); });
-        panel.appendChild(b);
-      });
+    if (KIND === 'rsvp') {
+      panel.innerHTML =
+        '<p class="big">Got it. Thank you.</p>' +
+        '<p>Your answer is in. We&rsquo;ll see about the rest.</p>' +
+        '<p>While you&rsquo;re here: we&rsquo;re quietly gathering memories, ' +
+        'photographs and songs to bind into a book for her birthday. ' +
+        'It would not be the same without yours.</p>';
+      var go = document.createElement('a');
+      go.className = 'cta';
+      go.href = 'memories.html';
+      go.textContent = 'Share a memory';
+      panel.appendChild(go);
+
+      var later = document.createElement('p');
+      later.className = 'note';
+      later.textContent = 'Or come back to it any time before December 19.';
+      panel.appendChild(later);
+    } else {
+      panel.innerHTML =
+        '<p class="big">Got it. Thank you.</p>' +
+        '<p>That is safely in the pile now, and it will reach her.</p>' +
+        '<p>Still hunting for a photograph, or is someone else in the house ' +
+        'writing their own? Come back to this page any time before ' +
+        '<strong>Saturday, December 19</strong>, when the book goes to be printed.</p>';
+
+      [['Send something else', true], ['Add someone else’s memory', false]]
+        .forEach(function (pair) {
+          var b = document.createElement('button');
+          b.type = 'button';
+          b.className = 'cta again';
+          b.textContent = pair[0];
+          b.addEventListener('click', function () { panel.remove(); reopen(pair[1]); });
+          panel.appendChild(b);
+        });
+    }
 
     form.hidden = true;
     form.parentNode.insertBefore(panel, form.nextSibling);
@@ -220,17 +239,29 @@
   /* ---------------------------------------------------------
      Submit
      --------------------------------------------------------- */
+  function value(name) {
+    var el = form.elements[name];
+    if (!el) return null;
+    var v = (el.value || '').trim();
+    return v || null;
+  }
+
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     if (busy) return;
-
     if (!form.checkValidity()) { form.reportValidity(); return; }
+
+    /* An empty memory form is a mis-tap, not a submission. */
+    if (KIND === 'memory' && !value('memory') && !value('songs') &&
+        !pickedPhotos.length && !pickedDocs.length) {
+      say('Add a memory, a photograph or a song first, then send.', 'error');
+      return;
+    }
 
     busy = true;
     button.disabled = true;
     button.textContent = 'Sending…';
 
-    var data = new FormData(form);
     var id = (window.crypto && crypto.randomUUID)
       ? crypto.randomUUID()
       : String(Date.now()) + '-' + Math.random().toString(16).slice(2);
@@ -239,20 +270,20 @@
     var total = pickedPhotos.length + pickedDocs.length, done = 0;
 
     function progress() {
-      if (total) say('Uploading ' + done + ' of ' + total + ' file' + (total === 1 ? '' : 's') + '…');
-      else say('Sending…');
+      say(total ? 'Uploading ' + done + ' of ' + total + ' file' +
+                  (total === 1 ? '' : 's') + '…'
+                : 'Sending…');
     }
     progress();
 
-    /* One at a time: kinder to a phone on a weak signal, and it gives
-       an honest running count instead of a spinner that means nothing. */
+    /* One at a time: kinder to a phone on a weak signal, and it gives an
+       honest running count instead of a spinner that means nothing. */
     var chain = Promise.resolve();
 
     pickedPhotos.forEach(function (file, i) {
       chain = chain.then(function () {
         return shrink(file).then(function (blob) {
           var base = safeName(file.name);
-          /* re-encoded to JPEG: swap the extension, don't stack a second one on */
           if (blob !== file && blob.type === 'image/jpeg') {
             base = base.replace(/\.[a-z0-9]+$/i, '') + '.jpg';
           }
@@ -275,6 +306,25 @@
 
     chain.then(function () {
       say('Almost there…');
+      var row = {
+        id:          id,
+        name:        value('name'),
+        email:       value('email'),
+        memory:      value('memory'),
+        songs:       value('songs'),
+        photo_paths: photoPaths,
+        doc_paths:   docPaths
+      };
+      /* Only the RSVP form knows about attendance. A memory arriving from
+         someone who has not answered yet must not overwrite that with a
+         guess, so those columns simply stay null. */
+      if (KIND === 'rsvp') {
+        row.attending = value('attending');
+        row.guests    = row.attending === 'yes'
+          ? (parseInt(value('guests'), 10) || 1)
+          : null;
+      }
+
       return fetch(CFG.url + '/rest/v1/' + CFG.table, {
         method: 'POST',
         headers: {
@@ -283,25 +333,17 @@
           'Content-Type':  'application/json',
           'Prefer':        'return=minimal'
         },
-        body: JSON.stringify({
-          id:          id,
-          name:        (data.get('name')  || '').trim(),
-          email:       (data.get('email') || '').trim() || null,
-          attending:   data.get('attending'),
-          guests:      parseInt(data.get('guests'), 10) || 0,
-          memory:      (data.get('memory') || '').trim() || null,
-          songs:       (data.get('songs')  || '').trim() || null,
-          photo_paths: photoPaths,
-          doc_paths:   docPaths
-        })
+        body: JSON.stringify(row)
       });
     }).then(function (r) {
-      if (!r.ok) return r.text().then(function (t) { throw new Error('Save failed (' + r.status + '): ' + t); });
+      if (!r.ok) return r.text().then(function (t) {
+        throw new Error('Save failed (' + r.status + '): ' + t);
+      });
       thankThem();
     }).catch(function (err) {
       busy = false;
       button.disabled = false;
-      button.textContent = 'Send it in';
+      button.textContent = SEND;
       say('That didn’t go through. ' + err.message +
           ' Please try again, or text it to Elisa on (818) 648-8023.', 'error');
     });

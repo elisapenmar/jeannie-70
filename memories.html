@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>Share a memory &middot; Jeannie turns 70</title>
+<meta name="theme-color" content="#08060f">
+
+<!-- How the link looks when it is texted or posted. Without these, iMessage
+     falls back to the bare cutout of Jeannie and flattens its transparency to
+     a muddy grey. Absolute URLs: scrapers do not resolve relative ones.
+     Bump ?v= when the card changes, since previews are cached hard. -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Share a memory &middot; Jeannie turns 70">
+<meta property="og:title" content="Share a memory &middot; Jeannie turns 70">
+<meta property="og:description" content="Help fill her book: a memory, a photograph, a song. Any time before December 19.">
+<meta property="og:url" content="https://elisapenmar.github.io/jeannie-70/memories.html">
+<meta property="og:image" content="https://elisapenmar.github.io/jeannie-70/images/og-preview.jpg?v=1">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Jeannie in a silver sequin jumpsuit and cowboy hat under a mirror ball, beside the words Jeannie turns 70">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Share a memory &middot; Jeannie turns 70">
+<meta name="twitter:description" content="Help fill her book: a memory, a photograph, a song. Any time before December 19.">
+<meta name="twitter:image" content="https://elisapenmar.github.io/jeannie-70/images/og-preview.jpg?v=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Monoton&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=9">
+</head>
+<body>
+
+<!-- ============ ROOM LIGHTING ============ -->
+<div class="beams" aria-hidden="true"></div>
+<div class="lights" id="lights" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
+
+<button class="music" id="music" type="button" hidden aria-label="Play the music"></button>
+
+
+<!-- ============ HEADER ============ -->
+<header class="subhead">
+  <div class="rig small" aria-hidden="true">
+    <div class="cord"></div>
+    <div class="ball-wrap">
+      <canvas id="ball" width="240" height="240"></canvas>
+      <div class="ball-bloom"></div>
+    </div>
+  </div>
+  <p class="eyebrow">Jeannie turns 70</p>
+  <h1 class="subtitle chrome">Share a memory</h1>
+  <a class="back" href="index.html">Back to the invitation</a>
+</header>
+
+<section class="panel">
+  <p class="lede">
+    We&rsquo;re gathering memories, photographs and songs to bind into a book
+    for her. Send whatever you have, whenever you have it, right up to
+    <strong>December 19</strong>. You can come back as many times as you like,
+    and you don&rsquo;t need to have answered the invitation first.
+  </p>
+
+  <form class="form" id="partyForm" data-kind="memory" novalidate>
+    <label class="field">
+      <span>Your name</span>
+      <input type="text" name="name" autocomplete="name" required>
+    </label>
+
+    <label class="field">
+      <span>Email <em>(only so we can ask if something goes astray)</em></span>
+      <input type="email" name="email" autocomplete="email">
+    </label>
+
+    <label class="field">
+      <span>A memory of her, and anything you&rsquo;d like her to know</span>
+      <p class="hint">
+        Tell us what happened, and, if you can, why it has stayed with you:
+        a day you&rsquo;ve never forgotten, something she taught you, the part she
+        has played in your life. And if there&rsquo;s something you&rsquo;d simply
+        like her to know, say that here too.
+      </p>
+      <p class="hint">
+        If there are several of you at home and more than one wants to write
+        something, please send them one at a time rather than together, so we
+        know whose words are whose. After you send, there is a button to add
+        the next person&rsquo;s.
+      </p>
+      <textarea name="memory" rows="11" placeholder="I&rsquo;ll never forget the time&hellip;"></textarea>
+    </label>
+
+    <div class="field alt">
+      <p class="or">or</p>
+      <p class="hint">
+        If you&rsquo;d rather draft it and then come back, do that instead.
+        Write it in Word, Pages or anywhere else, return to this page whenever
+        it&rsquo;s ready, and upload it here. Either way reaches her, and
+        there&rsquo;s no need to do both. You can attach more than one file if
+        several of you have written something.
+      </p>
+      <label class="drop small" for="docs">
+        <strong>Choose a document</strong>
+        <small>Word, Pages, PDF or plain text</small>
+      </label>
+      <input id="docs" type="file" name="docs" accept=".pdf,.doc,.docx,.pages,.txt,.rtf" multiple hidden>
+      <div class="filelist" id="filelist"></div>
+    </div>
+
+    <div class="field">
+      <span>Photos <em>(with her, or ones you&rsquo;d like her to have)</em></span>
+      <p class="hint">
+        On a phone this opens your camera roll, so pick as many as you like.
+        Old photographs are welcome too: a snapshot of a print works perfectly well.
+      </p>
+      <label class="drop" for="photos">
+        <strong>Choose photos</strong>
+        <small>Straight from your phone &middot; JPG, PNG, HEIC</small>
+      </label>
+      <input id="photos" type="file" name="photos"
+             accept="image/*,.heic,.heif" multiple hidden>
+      <div class="thumbs" id="thumbs"></div>
+    </div>
+
+    <label class="field">
+      <span>Songs for the dance floor</span>
+      <p class="hint">
+        Is there something we should play that reminds you of her? Put it here.
+        One song or a whole list, as many as you like, in whatever order
+        they come to you.
+      </p>
+      <textarea name="songs" rows="4" placeholder="Dancing Queen, by Abba"></textarea>
+    </label>
+
+    <p class="hint sendnote">
+      Sending now does not close the door. Whatever isn&rsquo;t ready yet can
+      follow later, from this same page, any time before December 19.
+    </p>
+    <button class="cta submit" type="submit">Send it in</button>
+    <p class="note" id="formNote" role="status" aria-live="polite"></p>
+  </form>
+</section>
+
+<footer class="foot">Made with love and far too many sequins.</footer>
+
+<script src="js/config.js?v=9"></script>
+<script src="js/disco.js?v=9"></script>
+<script src="js/audio.js?v=9"></script>
+<script src="js/form.js?v=9"></script>
+</body>
+</html>

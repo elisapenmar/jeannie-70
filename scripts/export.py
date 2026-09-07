@@ -92,6 +92,15 @@ def main():
     def newest(subs):
         return subs[-1]          # rows arrive oldest first
 
+    def answer(subs):
+        """Their latest actual answer. RSVP and memories are separate pages, so
+        most rows carry no attendance at all; the newest row is usually a
+        memory and reading attendance off it would lose the reply."""
+        for r in reversed(subs):
+            if r.get("attending"):
+                return r
+        return None
+
     # --- the guest list, one line per person -----------------------------
     with open(dest / "rsvps.csv", "w", newline="", encoding="utf-8") as fh:
         w = csv.writer(fh)
@@ -99,10 +108,11 @@ def main():
                     "Documents", "Songs", "Submissions", "First heard", "Last heard"])
         for subs in people.values():
             last = newest(subs)
+            ans  = answer(subs)
             w.writerow([
                 last["name"], last.get("email") or "",
-                ATTENDING.get(last["attending"], last["attending"]),
-                last["guests"],
+                ATTENDING.get(ans["attending"], ans["attending"]) if ans else "No answer yet",
+                (ans or {}).get("guests") or "",
                 sum(len(r["photo_paths"]) for r in subs),
                 sum(len(r["doc_paths"]) for r in subs),
                 "yes" if any(r.get("songs") for r in subs) else "",
@@ -111,8 +121,11 @@ def main():
                 last["created_at"][:10],
             ])
 
-    coming = sum(newest(s)["guests"] for s in people.values()
-                 if newest(s)["attending"] == "yes")
+    coming = 0
+    for subs in people.values():
+        ans = answer(subs)
+        if ans and ans["attending"] == "yes":
+            coming += ans.get("guests") or 1
 
     # --- everything written, in one readable document --------------------
     with open(dest / "memories.md", "w", encoding="utf-8") as fh:

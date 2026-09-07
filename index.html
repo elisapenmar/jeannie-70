@@ -23,16 +23,16 @@
 <meta property="og:image:alt" content="Jeannie in a silver sequin jumpsuit and cowboy hat under a mirror ball, beside the words Jeannie turns 70">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Jeannie turns 70">
-<meta name="twitter:description" content="Saturday, January 23 in Phoenix. Sequins strongly encouraged.">
+<meta name="twitter:description" content="Saturday, January 23 in Phoenix. Sequins strongly encouraged. Come and dance, and help us fill her book with memories.">
 <meta name="twitter:image" content="https://elisapenmar.github.io/jeannie-70/images/og-preview.jpg?v=1">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Monoton&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=7">
+<link rel="stylesheet" href="css/style.css?v=9">
 </head>
 <body>
 
-<!-- ============ ROOM LIGHTING LAYERS ============ -->
+<!-- ============ ROOM LIGHTING ============ -->
 <div class="beams" aria-hidden="true"></div>
 <div class="lights" id="lights" aria-hidden="true"></div>
 <div class="grain" aria-hidden="true"></div>
@@ -85,7 +85,16 @@
     <div><dt>Dress code</dt><dd>Sequins strongly encouraged</dd></div>
     <div><dt>Questions</dt><dd>Elisa &middot; <a href="tel:+18186488023">(818) 648-8023</a></dd></div>
   </dl>
-  <a class="cta" href="#rsvp">RSVP &amp; share a memory</a>
+</section>
+
+<!-- ============ THE TWO THINGS TO DO ============ -->
+<section class="panel choose" id="choose">
+  <a class="cta" href="rsvp.html">RSVP</a>
+  <a class="cta ghost" href="memories.html">Share a memory</a>
+  <p class="choose-note">
+    They don&rsquo;t have to happen together. Come back any time before
+    December 19 to share your memory.
+  </p>
 </section>
 
 <!-- ============ THE SONG ============ -->
@@ -138,138 +147,10 @@
   </details>
 </section>
 
-<!-- ============ RSVP ============ -->
-<section class="panel" id="rsvp">
-  <h2 class="chrome">RSVP</h2>
-  <p class="lede">
-    Let us know if you can make it, and then help us with the surprise.
-    We&rsquo;re gathering memories, photographs and songs to bind into a book
-    for her. <strong>Please send those even if you can&rsquo;t be there.</strong>
-    The book is the part of this
-    that shouldn&rsquo;t miss anyone, and distance is no reason to be left out of
-    it.
-    <br><br>
-    And none of it has to arrive at once. Send your answer now, then come back to
-    this page whenever you like to add a memory, photographs or a song. You can
-    send as many times as you like, and we will put it all together at our end.
-    <br><br>
-    One gentle thing: the book has to be printed and bound before the night, so
-    we would be so grateful to have your reply, and anything you would like to
-    send, by <strong>Saturday, December 19</strong>. If something is going to be
-    late, tell Elisa and we will wait for it.
-  </p>
-
-  <form class="form" id="rsvpForm" novalidate>
-    <label class="field">
-      <span>Your name</span>
-      <input type="text" name="name" autocomplete="name" required>
-    </label>
-
-    <label class="field">
-      <span>Email <em>(so we can reach you)</em></span>
-      <input type="email" name="email" autocomplete="email" required>
-    </label>
-
-    <fieldset class="field">
-      <span class="legend">Can you come?</span>
-      <div class="choices">
-        <label><input type="radio" name="attending" value="yes" required><span>Wouldn&rsquo;t miss it</span></label>
-        <label><input type="radio" name="attending" value="no"><span>Can&rsquo;t make it</span></label>
-        <label><input type="radio" name="attending" value="maybe"><span>I&rsquo;ll confirm later</span></label>
-      </div>
-      <p class="hint away" id="awayNote" hidden>
-        We&rsquo;re sorry to miss you, but please do carry on down the page.
-        A memory, a photograph and a song from you would mean just as much in her
-        book as it would from anyone standing in the room.
-      </p>
-      <p class="hint away" id="laterNote" hidden>
-        That&rsquo;s completely fine. Send your memory, photographs and songs now
-        while you have the page open, then come back and tell us yes or no once
-        you know. Only the answer needs to reach us by December 19.
-      </p>
-    </fieldset>
-
-    <label class="field" id="guestsField">
-      <span>How many of you? <em>(including yourself)</em></span>
-      <input type="number" name="guests" min="0" max="12" value="1" inputmode="numeric">
-    </label>
-
-    <hr class="rule">
-
-    <label class="field">
-      <span>A memory of her, and anything you&rsquo;d like her to know</span>
-      <p class="hint">
-        Tell us what happened, and, if you can, why it has stayed with you:
-        a day you&rsquo;ve never forgotten, something she taught you, the part she
-        has played in your life. And if there&rsquo;s something you&rsquo;d simply
-        like her to know, say that here too.
-      </p>
-      <p class="hint">
-        If there are several of you at home and more than one wants to write
-        something, please send them one at a time rather than together, so we
-        know whose words are whose. After you send, there is a button to add
-        the next person&rsquo;s.
-      </p>
-      <textarea name="memory" rows="11" placeholder="I&rsquo;ll never forget the time&hellip;"></textarea>
-    </label>
-
-    <div class="field alt">
-      <p class="or">or</p>
-      <p class="hint">
-        If you&rsquo;d rather draft it and then come back, do that instead.
-        Write it in Word, Pages or anywhere else, return to this page whenever
-        it&rsquo;s ready, and upload it here. Either way reaches her, and
-        there&rsquo;s no need to do both. You can attach more than one file if
-        several of you have written something.
-      </p>
-      <label class="drop small" for="docs">
-        <strong>Choose a document</strong>
-        <small>Word, Pages, PDF or plain text</small>
-      </label>
-      <input id="docs" type="file" name="docs" accept=".pdf,.doc,.docx,.pages,.txt,.rtf" multiple hidden>
-      <div class="filelist" id="filelist"></div>
-    </div>
-
-    <div class="field">
-      <span>Photos <em>(with her, or ones you&rsquo;d like her to have)</em></span>
-      <p class="hint">
-        On a phone this opens your camera roll, so pick as many as you like.
-        Old photographs are welcome too: a snapshot of a print works perfectly well.
-      </p>
-      <label class="drop" for="photos">
-        <strong>Choose photos</strong>
-        <small>Straight from your phone &middot; JPG, PNG, HEIC</small>
-      </label>
-      <input id="photos" type="file" name="photos"
-             accept="image/*,.heic,.heif" multiple hidden>
-      <div class="thumbs" id="thumbs"></div>
-    </div>
-
-    <label class="field">
-      <span>Songs for the dance floor</span>
-      <p class="hint">
-        Is there something we should play that reminds you of her? Put it here.
-        One song or a whole list, as many as you like, in whatever order
-        they come to you.
-      </p>
-      <textarea name="songs" rows="4"
-                placeholder="Dancing Queen, by Abba"></textarea>
-    </label>
-
-    <p class="hint sendnote">
-      Sending now does not close the door. Whatever isn&rsquo;t ready yet can
-      follow later, from this same page, any time before December 19.
-    </p>
-    <button class="cta submit" type="submit">Send it in</button>
-    <p class="note" id="formNote" role="status" aria-live="polite"></p>
-  </form>
-</section>
-
 <footer class="foot">Made with love and far too many sequins.</footer>
 
-<script src="js/config.js?v=7"></script>
-<script src="js/disco.js?v=7"></script>
-<script src="js/audio.js?v=7"></script>
-<script src="js/form.js?v=7"></script>
+<script src="js/config.js?v=9"></script>
+<script src="js/disco.js?v=9"></script>
+<script src="js/audio.js?v=9"></script>
 </body>
 </html>
