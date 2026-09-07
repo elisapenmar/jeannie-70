@@ -17,6 +17,11 @@
 
 *{box-sizing:border-box}
 
+/* An author display rule outranks the browser's own [hidden]{display:none},
+   so any element given display by a class ignored the attribute entirely.
+   That is how both contact fields stayed on screen with no method chosen. */
+[hidden]{ display:none !important; }
+
 html{ scroll-behavior:smooth; background:var(--bg); }
 
 body{
@@ -374,8 +379,12 @@ body{
 
 /* ============ FORM ============ */
 
-.form{ display:grid; gap:22px; }
-.field{ display:grid; gap:9px; border:0; padding:0; margin:0; }
+.form{ display:grid; gap:34px; }
+.field{ display:grid; gap:10px; border:0; padding:0; margin:0; }
+
+/* the answer-dependent questions are wrapped in a div, which otherwise
+   collapses them against each other and against whatever follows */
+#comingOnly{ display:grid; gap:34px; }
 .field > span, .legend{
   font-size:.74rem; letter-spacing:.19em; text-transform:uppercase; color:var(--gold);
 }
