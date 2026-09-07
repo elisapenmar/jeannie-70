@@ -279,6 +279,12 @@ body{
   color:var(--gold); padding-top:3px;
 }
 .details dd{ margin:0; line-height:1.55; font-weight:400; }
+/* the tel: link must not fall back to the browser's default link blue */
+.details dd a{
+  color:inherit; text-decoration:none;
+  border-bottom:1px solid rgba(255,255,255,.3);
+}
+.details dd a:hover{ border-bottom-color:var(--gold); }
 
 .cta{
   display:block; width:100%; text-align:center;
