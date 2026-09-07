@@ -61,6 +61,12 @@ def write_log(dest):
 
 
 def get(path, key, binary=False):
+    # Cheap insurance against the bug that cost several rounds: a local named
+    # `key` in main() replaced the credential with a tuple, and the failure
+    # surfaced only as a confusing TypeError deep in urllib.
+    if not isinstance(key, str):
+        raise TypeError(f"the API key was replaced by a {type(key).__name__} "
+                        "somewhere before this call")
     req = urllib.request.Request(
         URL + path,
         headers={"apikey": key, "Authorization": "Bearer " + key},
@@ -118,8 +124,11 @@ def main():
     people = {}
     for r in rows:
         who = re.sub(r"[^a-z0-9]+", " ", r["name"].lower()).strip()
-        key = ((r.get("email") or "").strip().lower(), who)
-        people.setdefault(key, []).append(r)
+        # NOT `key`: that name holds the API key, and reusing it here silently
+        # replaced the credential with a tuple, so every download after this
+        # loop failed while the table read before it kept working.
+        person_key = ((r.get("email") or "").strip().lower(), who)
+        people.setdefault(person_key, []).append(r)
 
     def newest(subs):
         return subs[-1]          # rows arrive oldest first
