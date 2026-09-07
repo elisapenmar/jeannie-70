@@ -329,7 +329,22 @@ textarea{ resize:vertical; line-height:1.6; }
 .filelist button{ border:0; background:none; color:var(--ink-dim); cursor:pointer; font-size:15px; }
 
 .rule{ border:0; border-top:1px solid rgba(255,255,255,.1); margin:6px 0; }
-.note{ text-align:center; font-size:.8rem; color:var(--ink-dim); margin:0; }
+.note{ text-align:center; font-size:.86rem; color:var(--ink-dim); margin:0; min-height:1.2em; }
+.note.error{ color:#ff9db1; }
+
+.cta[disabled]{ opacity:.6; cursor:progress; }
+
+.thumbs figure.no-preview::after{
+  content:"HEIC"; position:absolute; inset:0; display:grid; place-items:center;
+  font-size:.7rem; letter-spacing:.12em; color:var(--ink-dim);
+}
+
+.thanks{ text-align:center; padding:26px 0; display:grid; gap:12px; }
+.thanks .big{
+  margin:0; font-family:"Monoton", cursive; font-size:clamp(1.4rem,6vw,2rem);
+  color:var(--gold);
+}
+.thanks p{ margin:0; color:var(--ink-dim); line-height:1.6; }
 
 .foot{
   position:relative; z-index:2; text-align:center;

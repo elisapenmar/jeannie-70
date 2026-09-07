@@ -1,0 +1,139 @@
+#!/usr/bin/env python3
+"""Pull every RSVP, memory, message and uploaded file down to a local folder.
+
+Run this whenever you want a fresh copy of what guests have sent in. It is safe
+to run repeatedly — files already downloaded are skipped, so it only fetches
+what is new.
+
+    export SUPABASE_SERVICE_KEY='...'          # see below
+    python3 scripts/export.py
+
+The service key is the one that can READ the submissions; the key in the web
+page deliberately cannot. Get it from the Supabase dashboard under
+Project Settings -> API keys -> service_role (also labelled "secret").
+Never paste it into a file in this repo.
+
+By default everything lands in the Google Drive folder alongside the other
+party material. Pass a different destination as the first argument.
+"""
+
+import csv
+import json
+import os
+import pathlib
+import re
+import sys
+import urllib.error
+import urllib.parse
+import urllib.request
+
+URL    = "https://fomzgjyfimjijvvkgjns.supabase.co"
+BUCKET = "party70"
+TABLE  = "party70_rsvps"
+
+DEFAULT_DEST = pathlib.Path(
+    "/Users/elisapenmar/Library/CloudStorage/GoogleDrive-elisa.penmar@gmail.com"
+    "/My Drive/Projects/Holidays and Events/Moms 70th/submissions"
+)
+
+ATTENDING = {"yes": "Coming", "no": "Can't come", "maybe": "Not sure"}
+
+
+def get(path, key, binary=False):
+    req = urllib.request.Request(
+        URL + path,
+        headers={"apikey": key, "Authorization": "Bearer " + key},
+    )
+    with urllib.request.urlopen(req) as r:
+        raw = r.read()
+    return raw if binary else json.loads(raw)
+
+
+def folder_name(name, uid):
+    """A readable per-guest folder, kept unique by a slice of the row id."""
+    stem = re.sub(r"[^A-Za-z0-9 ]+", "", name or "").strip() or "unnamed"
+    return f"{stem[:48]} ({uid[:8]})"
+
+
+def main():
+    key = os.environ.get("SUPABASE_SERVICE_KEY")
+    if not key:
+        sys.exit(
+            "SUPABASE_SERVICE_KEY is not set.\n"
+            "Supabase dashboard -> Project Settings -> API keys -> service_role, then:\n"
+            "  export SUPABASE_SERVICE_KEY='...'"
+        )
+
+    dest = pathlib.Path(sys.argv[1]) if len(sys.argv) > 1 else DEFAULT_DEST
+    dest.mkdir(parents=True, exist_ok=True)
+
+    try:
+        rows = get(f"/rest/v1/{TABLE}?select=*&order=created_at.asc", key)
+    except urllib.error.HTTPError as e:
+        sys.exit(f"Could not read submissions ({e.code}). Is the service key right?\n{e.read().decode()[:300]}")
+
+    if not rows:
+        print("No submissions yet.")
+        return
+
+    # --- the guest list -------------------------------------------------
+    with open(dest / "rsvps.csv", "w", newline="", encoding="utf-8") as fh:
+        w = csv.writer(fh)
+        w.writerow(["Name", "Email", "Attending", "Party size", "Photos", "Documents", "Submitted"])
+        for r in rows:
+            w.writerow([
+                r["name"], r.get("email") or "",
+                ATTENDING.get(r["attending"], r["attending"]),
+                r["guests"], len(r["photo_paths"]), len(r["doc_paths"]),
+                r["created_at"][:16].replace("T", " "),
+            ])
+
+    coming = sum(r["guests"] for r in rows if r["attending"] == "yes")
+
+    # --- everything written, in one readable document -------------------
+    with open(dest / "memories.md", "w", encoding="utf-8") as fh:
+        fh.write("# Memories and messages\n\n")
+        fh.write(f"{len(rows)} submissions · {coming} people expected\n\n---\n\n")
+        for r in rows:
+            if not (r.get("memory") or r.get("message")):
+                continue
+            fh.write(f"## {r['name']}\n\n")
+            if r.get("memory"):
+                fh.write(f"**A memory**\n\n{r['memory'].strip()}\n\n")
+            if r.get("message"):
+                fh.write(f"**What she means to them**\n\n{r['message'].strip()}\n\n")
+            if r["photo_paths"]:
+                fh.write(f"*{len(r['photo_paths'])} photo(s) in `{folder_name(r['name'], r['id'])}/`*\n\n")
+            fh.write("---\n\n")
+
+    # --- the files ------------------------------------------------------
+    got = skipped = failed = 0
+    for r in rows:
+        files = [("photos", p) for p in r["photo_paths"]] + \
+                [("documents", p) for p in r["doc_paths"]]
+        if not files:
+            continue
+        person = dest / folder_name(r["name"], r["id"])
+        for kind, path in files:
+            out = person / kind / pathlib.Path(path).name
+            if out.exists():
+                skipped += 1
+                continue
+            out.parent.mkdir(parents=True, exist_ok=True)
+            try:
+                blob = get("/storage/v1/object/" + BUCKET + "/" +
+                           urllib.parse.quote(path), key, binary=True)
+            except urllib.error.HTTPError as e:
+                print(f"  ! could not fetch {path} ({e.code})")
+                failed += 1
+                continue
+            out.write_bytes(blob)
+            got += 1
+
+    print(f"{len(rows)} submissions · {coming} people expected")
+    print(f"files: {got} downloaded, {skipped} already had, {failed} failed")
+    print(f"\n{dest}")
+
+
+if __name__ == "__main__":
+    main()
