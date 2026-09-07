@@ -236,7 +236,6 @@
     if (KIND === 'rsvp') {
       panel.innerHTML =
         '<p class="big">Got it. Thank you.</p>' +
-        '<p>Your answer is in. We&rsquo;ll see about the rest.</p>' +
         '<p>While you&rsquo;re here: we&rsquo;re quietly gathering memories, ' +
         'photographs and songs to bind into a book for her birthday. ' +
         'It would not be the same without yours.</p>';
