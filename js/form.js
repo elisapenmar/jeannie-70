@@ -77,15 +77,24 @@
     renderDocs();
   });
 
-  /* Say it again at the moment it matters: someone who has just tapped
-     "can't make it" is the person most likely to assume the rest isn't
-     for them, and they are exactly who we want to hear from. */
-  var awayNote = document.getElementById('awayNote');
+  /* Say it again at the moment it matters. Someone who has just tapped "can't
+     make it" is the person most likely to assume the rest isn't for them, and
+     they are exactly who we want to hear from. Someone deferring their answer
+     needs telling that the rest can still go in today. */
+  var awayNote   = document.getElementById('awayNote');
+  var laterNote  = document.getElementById('laterNote');
+  var guestField = document.getElementById('guestsField');
+
   [].forEach.call(form.querySelectorAll('input[name=attending]'), function (radio) {
     radio.addEventListener('change', function () {
-      if (awayNote) awayNote.hidden = (radio.value !== 'no');
+      if (awayNote)  awayNote.hidden  = (radio.value !== 'no');
+      if (laterNote) laterNote.hidden = (radio.value !== 'maybe');
+      /* A head count is meaningless until they have actually said yes, and
+         asking for one is a small nag at the worst moment. */
+      if (guestField) guestField.hidden = (radio.value !== 'yes');
     });
   });
+  if (guestField) guestField.hidden = true;
 
   /* ---------------------------------------------------------
      Shrink photos in the browser before they go up

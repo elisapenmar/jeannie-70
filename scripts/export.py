@@ -36,7 +36,7 @@ DEFAULT_DEST = pathlib.Path(
     "/My Drive/Projects/Holidays and Events/Moms 70th/submissions"
 )
 
-ATTENDING = {"yes": "Coming", "no": "Can't come", "maybe": "Not sure"}
+ATTENDING = {"yes": "Coming", "no": "Can't come", "maybe": "Will confirm later"}
 
 
 def get(path, key, binary=False):

@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Monoton&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=5">
+<link rel="stylesheet" href="css/style.css?v=6">
 </head>
 <body>
 
@@ -156,16 +156,21 @@
       <div class="choices">
         <label><input type="radio" name="attending" value="yes" required><span>Wouldn&rsquo;t miss it</span></label>
         <label><input type="radio" name="attending" value="no"><span>Can&rsquo;t make it</span></label>
-        <label><input type="radio" name="attending" value="maybe"><span>Not sure yet</span></label>
+        <label><input type="radio" name="attending" value="maybe"><span>I&rsquo;ll confirm later</span></label>
       </div>
       <p class="hint away" id="awayNote" hidden>
         We&rsquo;re sorry to miss you, but please do carry on down the page.
         A memory, a photograph and a song from you would mean just as much in her
         book as it would from anyone standing in the room.
       </p>
+      <p class="hint away" id="laterNote" hidden>
+        That&rsquo;s completely fine. Send your memory, photographs and songs now
+        while you have the page open, then come back and tell us yes or no once
+        you know. Only the answer needs to reach us by December 19.
+      </p>
     </fieldset>
 
-    <label class="field">
+    <label class="field" id="guestsField">
       <span>How many of you? <em>(including yourself)</em></span>
       <input type="number" name="guests" min="0" max="12" value="1" inputmode="numeric">
     </label>
@@ -243,9 +248,9 @@
 
 <footer class="foot">Made with love and far too many sequins.</footer>
 
-<script src="js/config.js?v=5"></script>
-<script src="js/disco.js?v=5"></script>
-<script src="js/audio.js?v=5"></script>
-<script src="js/form.js?v=5"></script>
+<script src="js/config.js?v=6"></script>
+<script src="js/disco.js?v=6"></script>
+<script src="js/audio.js?v=6"></script>
+<script src="js/form.js?v=6"></script>
 </body>
 </html>
