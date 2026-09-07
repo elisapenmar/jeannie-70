@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>Turning 70</title>
+<meta name="theme-color" content="#08060f">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Monoton&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ============ ROOM LIGHTING LAYERS ============ -->
+<div class="beams" aria-hidden="true"></div>
+<div class="lights" id="lights" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+
+  <div class="rig" aria-hidden="true">
+    <div class="cord"></div>
+    <div class="ball-wrap">
+      <canvas id="ball" width="360" height="360"></canvas>
+      <div class="ball-bloom"></div>
+    </div>
+  </div>
+
+  <div class="copy">
+    <p class="eyebrow">You&rsquo;re invited to boogie</p>
+    <h1 class="title">
+      <span class="chrome line-1">[NAME]</span>
+      <span class="turns">turns</span>
+      <span class="seventy">70</span>
+    </h1>
+  </div>
+
+  <div class="star-field" id="stars" aria-hidden="true"></div>
+
+  <figure class="mom">
+    <div class="floor-glow" aria-hidden="true"></div>
+    <img src="images/mom-disco.png"
+         alt="Mom in a silver sequin jumpsuit and cowboy hat wearing a sash that reads I'm turning 70"
+         width="816" height="1294" fetchpriority="high">
+  </figure>
+
+  <div class="lights front" id="lightsFront" aria-hidden="true"></div>
+
+  <a class="scroll-hint" href="#details" aria-label="Scroll for details">
+    <span></span>
+  </a>
+</section>
+
+<!-- ============ DETAILS ============ -->
+<section class="panel" id="details">
+  <h2 class="chrome">The Details</h2>
+  <dl class="details">
+    <div><dt>When</dt><dd>[DAY, MONTH DATE] &middot; [TIME]</dd></div>
+    <div><dt>Where</dt><dd>[VENUE]<br>[STREET ADDRESS]</dd></div>
+    <div><dt>Dress code</dt><dd>[e.g. Sequins strongly encouraged]</dd></div>
+    <div><dt>Questions</dt><dd>[YOUR NAME] &middot; [PHONE / EMAIL]</dd></div>
+  </dl>
+  <a class="cta" href="#rsvp">RSVP &amp; share a memory</a>
+</section>
+
+<!-- ============ RSVP (UI ONLY - NOT YET WIRED TO A BACKEND) ============ -->
+<section class="panel" id="rsvp">
+  <h2 class="chrome">RSVP</h2>
+  <p class="lede">
+    Two things: let us know if you can make it &mdash; and help us surprise her.
+    We&rsquo;re collecting memories and photos to bind into a book for her birthday.
+  </p>
+
+  <form class="form" id="rsvpForm" novalidate>
+    <label class="field">
+      <span>Your name</span>
+      <input type="text" name="name" autocomplete="name" required>
+    </label>
+
+    <label class="field">
+      <span>Email <em>(so we can reach you)</em></span>
+      <input type="email" name="email" autocomplete="email" required>
+    </label>
+
+    <fieldset class="field">
+      <span class="legend">Can you come?</span>
+      <div class="choices">
+        <label><input type="radio" name="attending" value="yes" required><span>Wouldn&rsquo;t miss it</span></label>
+        <label><input type="radio" name="attending" value="no"><span>Can&rsquo;t make it</span></label>
+        <label><input type="radio" name="attending" value="maybe"><span>Not sure yet</span></label>
+      </div>
+    </fieldset>
+
+    <label class="field">
+      <span>How many of you? <em>(including yourself)</em></span>
+      <input type="number" name="guests" min="0" max="12" value="1" inputmode="numeric">
+    </label>
+
+    <hr class="rule">
+
+    <label class="field">
+      <span>A memory of her <em>(any length &mdash; a sentence or a whole story)</em></span>
+      <textarea name="memory" rows="7" placeholder="The first time I met her&hellip;"></textarea>
+    </label>
+
+    <div class="field">
+      <span>Photos <em>(with her, or ones you&rsquo;d like her to have)</em></span>
+      <label class="drop" for="photos">
+        <strong>Choose photos</strong>
+        <small>JPG, PNG or HEIC &middot; as many as you like</small>
+      </label>
+      <input id="photos" type="file" name="photos" accept="image/*" multiple hidden>
+      <div class="thumbs" id="thumbs"></div>
+    </div>
+
+    <div class="field">
+      <span>Or upload a written memory <em>(Word, Pages, PDF)</em></span>
+      <label class="drop small" for="docs">
+        <strong>Choose a document</strong>
+      </label>
+      <input id="docs" type="file" name="docs" accept=".pdf,.doc,.docx,.pages,.txt,.rtf" multiple hidden>
+      <div class="filelist" id="filelist"></div>
+    </div>
+
+    <button class="cta submit" type="submit">Send it in</button>
+    <p class="note" id="formNote">Backend not connected yet &mdash; this button does nothing so far.</p>
+  </form>
+</section>
+
+<footer class="foot">Made with love and far too many sequins.</footer>
+
+<script src="js/disco.js"></script>
+<script src="js/form.js"></script>
+</body>
+</html>
