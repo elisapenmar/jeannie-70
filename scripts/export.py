@@ -95,13 +95,10 @@ def main():
         fh.write("# Memories and messages\n\n")
         fh.write(f"{len(rows)} submissions · {coming} people expected\n\n---\n\n")
         for r in rows:
-            if not (r.get("memory") or r.get("message")):
+            if not r.get("memory"):
                 continue
             fh.write(f"## {r['name']}\n\n")
-            if r.get("memory"):
-                fh.write(f"**A memory**\n\n{r['memory'].strip()}\n\n")
-            if r.get("message"):
-                fh.write(f"**What she means to them**\n\n{r['message'].strip()}\n\n")
+            fh.write(f"{r['memory'].strip()}\n\n")
             if r["photo_paths"]:
                 fh.write(f"*{len(r['photo_paths'])} photo(s) in `{folder_name(r['name'], r['id'])}/`*\n\n")
             fh.write("---\n\n")

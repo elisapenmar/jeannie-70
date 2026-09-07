@@ -275,6 +275,14 @@ body{
   color:var(--ink-dim); font-weight:300;
 }
 
+/* the written-memory upload is an alternative route to the box above it,
+   not another thing being asked for on top */
+.field.alt{ margin-top:-6px; padding-left:14px; border-left:1px solid rgba(255,255,255,.12); }
+.or{
+  margin:0 0 2px; font-size:.74rem; letter-spacing:.24em;
+  text-transform:uppercase; color:var(--gold); opacity:.85;
+}
+
 input[type=text], input[type=email], input[type=number], textarea{
   width:100%; padding:14px 15px;
   font-family:inherit; font-size:1rem; font-weight:300; color:var(--ink);

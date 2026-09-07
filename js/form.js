@@ -216,8 +216,7 @@
           email:       (data.get('email') || '').trim() || null,
           attending:   data.get('attending'),
           guests:      parseInt(data.get('guests'), 10) || 0,
-          memory:      (data.get('memory')  || '').trim() || null,
-          message:     (data.get('message') || '').trim() || null,
+          memory:      (data.get('memory') || '').trim() || null,
           photo_paths: photoPaths,
           doc_paths:   docPaths
         })

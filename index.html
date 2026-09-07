@@ -103,23 +103,32 @@
     <hr class="rule">
 
     <label class="field">
-      <span>A memory of her <em>(any length &mdash; a sentence or a whole story)</em></span>
+      <span>A memory of her &mdash; and anything you&rsquo;d like her to know</span>
       <p class="hint">
-        Tell us what happened &mdash; and, if you can, why it has stayed with you.
-        It might be a day you&rsquo;ve never forgotten, something she taught you,
-        or the part she has played in your life.
+        Tell us what happened, and, if you can, why it has stayed with you &mdash;
+        a day you&rsquo;ve never forgotten, something she taught you, the part she
+        has played in your life. And if there&rsquo;s something you&rsquo;d simply
+        like her to know, say that here too. It&rsquo;s all one box and there are
+        no rules: a sentence or ten pages, whichever way it comes out.
       </p>
-      <textarea name="memory" rows="8" placeholder="I&rsquo;ll never forget the time&hellip;"></textarea>
+      <textarea name="memory" rows="11" placeholder="I&rsquo;ll never forget the time&hellip;"></textarea>
     </label>
 
-    <label class="field">
-      <span>What she means to you <em>(she will read this)</em></span>
+    <div class="field alt">
+      <p class="or">or</p>
       <p class="hint">
-        A separate thing from the memory: this one is addressed straight to her.
-        Say the thing you&rsquo;d want her to know.
+        Would you rather write it properly, in your own time? Draft it in Word,
+        Pages or anywhere else, come back to this page whenever it&rsquo;s ready,
+        and upload it here instead. Either way reaches her &mdash; there&rsquo;s
+        no need to do both.
       </p>
-      <textarea name="message" rows="6" placeholder="What I want you to know is&hellip;"></textarea>
-    </label>
+      <label class="drop small" for="docs">
+        <strong>Choose a document</strong>
+        <small>Word, Pages, PDF or plain text</small>
+      </label>
+      <input id="docs" type="file" name="docs" accept=".pdf,.doc,.docx,.pages,.txt,.rtf" multiple hidden>
+      <div class="filelist" id="filelist"></div>
+    </div>
 
     <div class="field">
       <span>Photos <em>(with her, or ones you&rsquo;d like her to have)</em></span>
@@ -134,15 +143,6 @@
       <input id="photos" type="file" name="photos"
              accept="image/*,.heic,.heif" multiple hidden>
       <div class="thumbs" id="thumbs"></div>
-    </div>
-
-    <div class="field">
-      <span>Or upload a written memory <em>(Word, Pages, PDF)</em></span>
-      <label class="drop small" for="docs">
-        <strong>Choose a document</strong>
-      </label>
-      <input id="docs" type="file" name="docs" accept=".pdf,.doc,.docx,.pages,.txt,.rtf" multiple hidden>
-      <div class="filelist" id="filelist"></div>
     </div>
 
     <button class="cta submit" type="submit">Send it in</button>
