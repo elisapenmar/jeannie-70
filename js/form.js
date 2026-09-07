@@ -156,43 +156,53 @@
 
 
   /* Nothing has to arrive in one go: someone can answer today and send photos
-     next week. So the thank-you offers a way straight back in, and keeps their
-     name, address and answer filled in — a second trip should cost them the
-     new thing only, not everything they already typed. */
+     next week, and a household can send one memory per person. So the
+     thank-you offers two ways back in, and each keeps exactly as much as it
+     should. A second trip must cost only the new thing, or the photograph
+     never arrives. */
+  function reopen(sameperson) {
+    form.hidden = false;
+
+    form.memory.value = '';
+    form.songs.value  = '';
+    pickedPhotos = [];
+    pickedDocs   = [];
+    renderThumbs();
+    renderDocs();
+
+    /* A different person in the same house keeps the household's address and
+       answer, but must not inherit the last one's name, or their memory ends
+       up filed under somebody else. */
+    if (!sameperson) form.name.value = '';
+
+    busy = false;
+    button.disabled = false;
+    button.textContent = 'Send it in';
+    say('');
+    form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    (sameperson ? form.memory : form.name).focus({ preventScroll: true });
+  }
+
   function thankThem() {
     var panel = document.createElement('div');
     panel.className = 'thanks';
     panel.innerHTML =
       '<p class="big">Got it. Thank you.</p>' +
       '<p>That is safely in the pile now, and it will reach her.</p>' +
-      '<p>Thought of something else, or still hunting for a photograph? ' +
-      'Come back to this page whenever you like. There is no closing date.</p>';
+      '<p>Still hunting for a photograph, or is someone else in the house ' +
+      'writing their own? Come back to this page any time before ' +
+      '<strong>Saturday, December 19</strong>, when the book goes to be printed.</p>';
 
-    var again = document.createElement('button');
-    again.type = 'button';
-    again.className = 'cta again';
-    again.textContent = 'Send something else';
-    again.addEventListener('click', function () {
-      panel.remove();
-      form.hidden = false;
+    [['Send something else', true], ['Add someone else\u2019s memory', false]]
+      .forEach(function (pair) {
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'cta again';
+        b.textContent = pair[0];
+        b.addEventListener('click', function () { panel.remove(); reopen(pair[1]); });
+        panel.appendChild(b);
+      });
 
-      /* clear only what was actually sent; identity stays put */
-      form.memory.value = '';
-      form.songs.value  = '';
-      pickedPhotos = [];
-      pickedDocs   = [];
-      renderThumbs();
-      renderDocs();
-
-      busy = false;
-      button.disabled = false;
-      button.textContent = 'Send it in';
-      say('');
-      form.memory.focus({ preventScroll: true });
-      form.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
-
-    panel.appendChild(again);
     form.hidden = true;
     form.parentNode.insertBefore(panel, form.nextSibling);
     panel.scrollIntoView({ behavior: 'smooth', block: 'center' });

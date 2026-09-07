@@ -78,12 +78,15 @@ def main():
         return
 
     # People are told they can answer now and send photos later, so one guest
-    # may appear as several rows. Merge them, or the same person ends up
-    # scattered across half a dozen folders. Email identifies them where we
-    # have it, since a name gets typed differently each time.
+    # may appear as several rows and those must merge. But a household shares
+    # one address and each person there writes their own memory, so email
+    # alone would fold a whole family into one entry and misattribute their
+    # words. Key on address AND name, normalised so that "Bob Smith" and
+    # "bob  smith" still count as the same person coming back.
     people = {}
     for r in rows:
-        key = (r.get("email") or "").strip().lower() or r["name"].strip().lower()
+        who = re.sub(r"[^a-z0-9]+", " ", r["name"].lower()).strip()
+        key = ((r.get("email") or "").strip().lower(), who)
         people.setdefault(key, []).append(r)
 
     def newest(subs):
