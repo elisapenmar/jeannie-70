@@ -10,7 +10,7 @@ the day will come when there are real memories in here.
 """
 import json, os, sys, urllib.error, urllib.parse, urllib.request
 
-URL, BUCKET, TABLE = ("https://fomzgjyfimjijvvkgjns.supabase.co", "party70", "party70_rsvps")
+URL, BUCKET, TABLE = ("https://rjnfvyjghybutgrtbbeu.supabase.co", "party70", "party70_rsvps")
 
 key = os.environ.get("SUPABASE_SERVICE_KEY")
 if not key:

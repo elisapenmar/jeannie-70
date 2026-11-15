@@ -25,9 +25,19 @@ fails.
 
 ## Where submissions go
 
-Supabase project `trip-planner` (`fomzgjyfimjijvvkgjns`), sharing that project
-to avoid the $10/month a third project would cost. Everything is namespaced
-`party70` and cannot collide with the trip planner's own tables.
+Supabase project `writers-cube-v05` (`rjnfvyjghybutgrtbbeu`). Everything is
+namespaced `party70` and cannot collide with that project's own tables.
+
+This is the second home. The first was a project called `trip-planner`, which
+was deleted in November 2026, taking the party's table and bucket with it: the
+name gave no hint that a birthday depended on it, and nothing warned anybody.
+Guests met a form that failed silently for an unknown stretch.
+
+Two lessons are built in below. Borrowing a project named for something else
+is a trap, so if this ever moves again it should go somewhere whose name says
+what it holds. And an export is not a convenience, it is the only backup:
+run it often, because the copy in Google Drive is the one that survives
+somebody tidying up a dashboard.
 
 - table `public.party70_rsvps` — one row per guest
 - bucket `party70` — private, 25 MB a file, photos and documents

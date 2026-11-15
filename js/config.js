@@ -2,15 +2,15 @@
 
    This key is a PUBLISHABLE key and is meant to be visible in the page.
    It is safe here because of the row-level security set up in the
-   party70_rsvp_and_memory_collection migration: anonymous callers may only
+   party70_rebuild migrations: anonymous callers may only
    INSERT a row and upload into the party70 bucket. They cannot read, edit or
    delete anything — not their own submission, and not anyone else's.
 
    The service_role key is what bypasses that. It must never appear in this
    repo; scripts/export.py reads it from the environment instead. */
 window.PARTY70 = {
-  url:    'https://fomzgjyfimjijvvkgjns.supabase.co',
-  key:    'sb_publishable_kY7cRkbT9TZoCuzkHc9zlw_NZk4Vxsy',
+  url:    'https://rjnfvyjghybutgrtbbeu.supabase.co',
+  key:    'sb_publishable_RbEKLU8xago3CgF-zEc5GA_G98jnKqv',
   bucket: 'party70',
   table:  'party70_rsvps',
 

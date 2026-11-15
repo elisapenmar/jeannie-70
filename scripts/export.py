@@ -29,7 +29,7 @@ import urllib.error
 import urllib.parse
 import urllib.request
 
-URL    = "https://fomzgjyfimjijvvkgjns.supabase.co"
+URL    = "https://rjnfvyjghybutgrtbbeu.supabase.co"
 BUCKET = "party70"
 TABLE  = "party70_rsvps"
 
