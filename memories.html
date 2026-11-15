@@ -28,7 +28,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Monoton&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=31">
+<link rel="stylesheet" href="css/style.css?v=32">
 <script>
 /* Set before anything paints, so a calm visitor never catches a flash of the
    full disco. Honours the system preference until they choose for themselves. */
@@ -101,11 +101,6 @@ try {
         (More than one of you writing? Feel free to write separate messages.
         You can submit another one after the first.)
       </p>
-      <div class="dictate-row">
-        <button class="dictate" id="dictate" type="button"
-                aria-label="Dictate your letter instead of typing"></button>
-      </div>
-      <p class="hint" id="dictateNote" hidden></p>
       <textarea name="memory" rows="11"></textarea>
     </label>
 
@@ -122,6 +117,19 @@ try {
       <input id="docs" type="file" name="docs"
              accept="image/*,.heic,.heif,.pdf,.doc,.docx,.pages,.txt,.rtf" multiple hidden>
       <div class="filelist" id="filelist"></div>
+    </div>
+
+    <div class="field alt">
+      <p class="or">or</p>
+      <p class="hint">
+        Don&rsquo;t want to write at all? Say it out loud instead. We&rsquo;ll
+        listen and write it down, and she gets to hear your voice.
+      </p>
+      <div id="recorder">
+        <button class="record" id="recordBtn" type="button" aria-pressed="false"></button>
+        <p class="hint" id="recordStatus"></p>
+        <div class="recordings" id="recordings"></div>
+      </div>
     </div>
 
     <div class="field">
@@ -158,10 +166,10 @@ try {
 
 <footer class="foot">Made with love and far too many sequins.</footer>
 
-<script src="js/calm.js?v=31"></script>
-<script src="js/config.js?v=31"></script>
-<script src="js/disco.js?v=31"></script>
-<script src="js/dictate.js?v=31"></script>
-<script src="js/form.js?v=31"></script>
+<script src="js/calm.js?v=32"></script>
+<script src="js/config.js?v=32"></script>
+<script src="js/disco.js?v=32"></script>
+<script src="js/record.js?v=32"></script>
+<script src="js/form.js?v=32"></script>
 </body>
 </html>

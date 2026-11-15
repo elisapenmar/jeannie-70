@@ -186,14 +186,22 @@ def main():
         fh.write(f"{len(people)} people, {len(rows)} submissions, "
                  f"{coming} expected on the night\n\n---\n\n")
         for subs in people.values():
-            written = [r for r in subs if r.get("memory")]
+            # Somebody who only sent a recording still belongs in here, with a
+            # note where the audio is, so nothing is silently left out of the
+            # book while waiting to be transcribed.
+            written = [r for r in subs
+                       if r.get("memory") or (r.get("audio_paths") or [])]
             if not written:
                 continue
             fh.write(f"## {display_name(subs)}\n\n")
             for r in written:
                 if len(written) > 1:
                     fh.write(f"*sent {r['created_at'][:10]}*\n\n")
-                fh.write(f"{r['memory'].strip()}\n\n")
+                if r.get("memory"):
+                    fh.write(f"{r['memory'].strip()}\n\n")
+                if r.get("audio_paths"):
+                    fh.write(f"*{len(r['audio_paths'])} voice message(s) in "
+                             f"`{folder_name(subs)}/audio/`, still to transcribe.*\n\n")
             photos = sum(len(r["photo_paths"]) for r in subs)
             if photos:
                 fh.write(f"*{photos} photo(s) in `{folder_name(subs)}/`*\n\n")
@@ -218,7 +226,8 @@ def main():
         person = dest / folder_name(subs)
         for r in subs:
             files = [("photos", p) for p in r["photo_paths"]] + \
-                    [("documents", p) for p in r["doc_paths"]]
+                    [("documents", p) for p in r["doc_paths"]] + \
+                    [("audio", p) for p in r.get("audio_paths") or []]
             for kind, path in files:
                 # Two submissions from one person can both hold a "001-IMG_1234.jpg";
                 # without the submission id the second would silently overwrite,

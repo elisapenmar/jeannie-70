@@ -737,29 +737,42 @@ textarea{ resize:vertical; line-height:1.6; }
 
 
 /* ============================================================
-   DICTATION
+   VOICE MESSAGES
    ============================================================ */
 
-.dictate-row{ display:flex; }
-.dictate{
-  display:inline-flex; align-items:center; gap:8px;
-  padding:10px 16px 10px 13px; cursor:pointer;
+.record{
+  display:inline-flex; align-items:center; gap:9px;
+  padding:13px 20px 13px 16px; cursor:pointer;
   border-radius:100px; border:1px solid rgba(255,255,255,.26);
   background:rgba(255,255,255,.05); color:var(--ink);
-  font-family:inherit; font-size:.9rem; font-weight:400;
+  font-family:inherit; font-size:.95rem; font-weight:400;
   transition:background .15s ease, border-color .15s ease;
 }
-.dictate:hover{ background:rgba(255,255,255,.1); border-color:rgba(255,255,255,.4); }
-.dictate:focus-visible{ outline:2px solid var(--pink); outline-offset:2px; }
-.dictate svg{ width:17px; height:17px; fill:currentColor; display:block; }
+.record:hover{ background:rgba(255,255,255,.1); border-color:rgba(255,255,255,.4); }
+.record:focus-visible{ outline:2px solid var(--pink); outline-offset:2px; }
+.record svg{ width:18px; height:18px; fill:currentColor; display:block; }
 
-.dictate.listening{
+.record.recording{
   color:#1a0620; border-color:transparent;
   background:linear-gradient(100deg,#ffe9a8,#ffb3d8);
   animation:listening 1.4s ease-in-out infinite;
 }
 @keyframes listening{
   0%,100%{ box-shadow:0 0 0 0 rgba(255,79,163,.5); }
-  50%    { box-shadow:0 0 0 10px rgba(255,79,163,0); }
+  50%    { box-shadow:0 0 0 12px rgba(255,79,163,0); }
 }
-.calm .dictate.listening{ background:#ffe7f3; animation:none; }
+.calm .record.recording{ background:#ffe7f3; animation:none; }
+
+#recordStatus:empty{ display:none; }
+
+.recordings{ display:grid; gap:8px; }
+.recordings div{
+  display:flex; align-items:center; gap:10px;
+  padding:8px 10px; border-radius:12px;
+  background:rgba(255,255,255,.06);
+}
+.recordings audio{ flex:1 1 auto; min-width:0; height:34px; }
+.recordings button{
+  flex:0 0 auto; width:26px; height:26px; border:0; border-radius:50%;
+  background:rgba(0,0,0,.5); color:#fff; cursor:pointer; font-size:15px; line-height:1;
+}

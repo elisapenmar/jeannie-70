@@ -40,7 +40,14 @@ run it often, because the copy in Google Drive is the one that survives
 somebody tidying up a dashboard.
 
 - table `public.party70_rsvps` — one row per guest
-- bucket `party70` — private, 25 MB a file, photos and documents
+- bucket `party70` — private, 25 MB a file, photos, documents and recordings
+
+Guests can send a voice message rather than write. Nothing is transcribed in
+the browser on purpose: doing it once afterwards with a good tool beats doing
+it badly in fifty browsers, and the recording is worth keeping anyway. The
+export files them under `<person>/audio/` and memories.md names them as
+awaiting transcription, so a person who only recorded is never silently absent
+from the book.
 
 The memory is a single free-text field on purpose. A memory and what she means
 to someone are the same breath for most people, and splitting them made guests

@@ -214,6 +214,7 @@
     if (form.memory) form.memory.value = '';
     if (form.songs)  form.songs.value  = '';
     pickedPhotos = []; pickedDocs = [];
+    if (window.PARTY70_AUDIO) window.PARTY70_AUDIO.length = 0;
     renderThumbs(); renderDocs();
 
     /* A different person in the same house keeps the household's address, but
@@ -294,9 +295,10 @@
     if (!form.checkValidity()) { form.reportValidity(); return; }
 
     /* An empty memory form is a mis-tap, not a submission. */
+    var audio = window.PARTY70_AUDIO || [];
     if (KIND === 'memory' && !value('memory') && !value('songs') &&
-        !pickedPhotos.length && !pickedDocs.length) {
-      say('Add a memory, a photograph or a song first, then send.', 'error');
+        !pickedPhotos.length && !pickedDocs.length && !audio.length) {
+      say('Add a memory, a recording, a photograph or a song first.', 'error');
       return;
     }
 
@@ -308,8 +310,8 @@
       ? crypto.randomUUID()
       : String(Date.now()) + '-' + Math.random().toString(16).slice(2);
 
-    var photoPaths = [], docPaths = [];
-    var total = pickedPhotos.length + pickedDocs.length, done = 0;
+    var photoPaths = [], docPaths = [], audioPaths = [];
+    var total = pickedPhotos.length + pickedDocs.length + audio.length, done = 0;
 
     function progress() {
       say(total ? 'Uploading ' + done + ' of ' + total + ' file' +
@@ -346,6 +348,15 @@
       });
     });
 
+    audio.forEach(function (file, i) {
+      chain = chain.then(function () {
+        var path = id + '/audio/' + String(i + 1).padStart(3, '0') + '-' + safeName(file.name);
+        return upload(path, file, file.type).then(function (p) {
+          audioPaths.push(p); done++; progress();
+        });
+      });
+    });
+
     chain.then(function () {
       say('Almost there…');
       var row = {
@@ -355,7 +366,8 @@
         memory:      value('memory'),
         songs:       value('songs'),
         photo_paths: photoPaths,
-        doc_paths:   docPaths
+        doc_paths:   docPaths,
+        audio_paths: audioPaths
       };
       /* Only the RSVP form knows about attendance. A memory arriving from
          someone who has not answered yet must not overwrite that with a
