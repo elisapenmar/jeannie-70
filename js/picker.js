@@ -47,9 +47,11 @@
     return matched;
   }
 
-  /* Nothing chosen: open Type, so the page is never a row of buttons that
-     all have to be pressed before anything can be written. */
-  if (!fromHash(false)) open(picks[1], true, false);
+  /* All closed unless a link asked for one. Three shut cards read as a choice
+     to make; one hanging open reads as the choice already made for you.
+     (draft.js still opens Type when it restores text, or the restored letter
+     would be invisible behind a closed card.) */
+  fromHash(false);
 
   /* Changing only the hash does not reload the page, so without this a link
      tapped while already here would silently do nothing. */
