@@ -89,3 +89,38 @@ then open <http://localhost:8777>.
 
 Assets live in Google Drive under `Projects/Holidays and Events/Moms 70th`.
 The repo is kept outside Drive because Drive's sync engine corrupts `.git`.
+
+
+## Backups, and keeping the project awake
+
+`scripts/daily-export.sh` runs the export once a day through a launchd agent.
+It does two jobs. It keeps a copy of every RSVP, memory and photograph in
+Google Drive, which is the only real protection against losing them again. And
+it touches the database daily, so a free-tier Supabase project never sits idle
+the week it takes to pause itself.
+
+Set it up once:
+
+    security add-generic-password -a "$USER" -s jeannie70-supabase -w 'SERVICE_KEY'
+    ./scripts/install-daily-export.sh
+
+The key lives in the macOS Keychain, never in this repo. Log goes to
+`~/Library/Logs/jeannie70-export.log`.
+
+## Email on every submission
+
+A trigger on `party70_rsvps` posts to Resend through `pg_net`. Configure it by
+putting the key and the address in `party70_settings`, which has RLS on and no
+policies, so anonymous callers cannot read it:
+
+    insert into public.party70_settings (id, resend_key, notify_email)
+    values (1, 're_...', 'you@example.com')
+    on conflict (id) do update
+      set resend_key = excluded.resend_key,
+          notify_email = excluded.notify_email;
+
+Until that row exists the trigger returns silently. The whole POST is wrapped
+in an exception handler and pg_net is asynchronous, so a missing key, a wrong
+key or a dead provider cannot turn into a failed RSVP. Both paths are tested:
+a submission succeeds unconfigured, and succeeds with a deliberately invalid
+key. The notification is a convenience. The submission is the point.
