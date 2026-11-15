@@ -28,7 +28,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Monoton&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=24">
+<link rel="stylesheet" href="css/style.css?v=25">
 <script>
 /* Set before anything paints, so a calm visitor never catches a flash of the
    full disco. Honours the system preference until they choose for themselves. */
@@ -65,18 +65,13 @@ try {
 
 <section class="panel">
   <p class="lede">
-    We&rsquo;re gathering memories, photographs and songs to bind into a book
-    for her. Send whatever you have, whenever you have it, right up to
-    <strong>December 19</strong>. You can come back as many times as you like,
-    and you don&rsquo;t need to have answered the invitation first.
+    We&rsquo;re binding memories, messages and photographs into a book for her
+    seventieth. Everything needs to be in by <strong>December 19</strong>.
+    You can come back as many times as you like.
   </p>
   <p class="lede aside">
     Haven&rsquo;t told us whether you can come?
     <a href="rsvp.html">Answer the invitation</a> as well.
-  </p>
-  <p class="lede aside">
-    Old photographs take the longest to find, so it&rsquo;s worth starting now
-    even if the party is a way off.
   </p>
 
   <form class="form" id="partyForm" data-kind="memory" novalidate>
@@ -107,21 +102,24 @@ try {
     <div class="field alt">
       <p class="or">or</p>
       <p class="hint">
-        Rather write it elsewhere and come back? Upload it here instead.
-        More than one file is fine.
+        Handwrite it. Photograph the note and add it here, and the book will
+        have your own handwriting in it.
       </p>
       <label class="drop small" for="docs">
-        <strong>Choose a document</strong>
-        <small>Word, Pages, PDF or plain text</small>
+        <strong>Add a photo of your note</strong>
+        <small>Or a typed document, if you&rsquo;d rather</small>
       </label>
-      <input id="docs" type="file" name="docs" accept=".pdf,.doc,.docx,.pages,.txt,.rtf" multiple hidden>
+      <input id="docs" type="file" name="docs"
+             accept="image/*,.heic,.heif,.pdf,.doc,.docx,.pages,.txt,.rtf" multiple hidden>
       <div class="filelist" id="filelist"></div>
     </div>
 
     <div class="field">
-      <span>Photos <em>(with her, or ones you&rsquo;d like her to have)</em></span>
+      <span>Photos</span>
       <p class="hint">
-        Old ones are welcome too: a snapshot of a print works fine.
+        A favourite photo of you, one of the two of you together, or any
+        you&rsquo;d like her to have. Old prints are welcome: a snapshot of a
+        print works fine.
       </p>
       <label class="drop" for="photos">
         <strong>Choose photos</strong>
@@ -150,9 +148,9 @@ try {
 
 <footer class="foot">Made with love and far too many sequins.</footer>
 
-<script src="js/calm.js?v=24"></script>
-<script src="js/config.js?v=24"></script>
-<script src="js/disco.js?v=24"></script>
-<script src="js/form.js?v=24"></script>
+<script src="js/calm.js?v=25"></script>
+<script src="js/config.js?v=25"></script>
+<script src="js/disco.js?v=25"></script>
+<script src="js/form.js?v=25"></script>
 </body>
 </html>
