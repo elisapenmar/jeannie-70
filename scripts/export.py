@@ -10,7 +10,7 @@ what is new.
 
 The service key is the one that can READ the submissions; the key in the web
 page deliberately cannot. Get it from the Supabase dashboard under
-Project Settings -> API keys -> service_role (also labelled "secret").
+Project Settings -> API keys -> service_role (also labeled "secret").
 Never paste it into a file in this repo.
 
 By default everything lands in the Google Drive folder alongside the other
@@ -126,7 +126,7 @@ def main():
         # Grouped on the name alone. Contact details can no longer serve as the
         # identifier: someone may RSVP asking to be texted, leaving no email at
         # all, then send a memory later and give one, and the two must still be
-        # recognised as the same person. Households already differ by name,
+        # recognized as the same person. Households already differ by name,
         # which was the only thing the address was doing.
         #
         # NOT named `key`: that holds the API key, and shadowing it once

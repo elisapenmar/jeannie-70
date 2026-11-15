@@ -65,7 +65,7 @@ body{
   will-change:transform;
 }
 
-/* Coloured light spots dappling the room */
+/* Colored light spots dappling the room */
 .lights{
   position:fixed; inset:-25%;
   pointer-events:none; z-index:0;

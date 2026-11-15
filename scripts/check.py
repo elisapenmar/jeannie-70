@@ -16,7 +16,7 @@ if not key:
 shape = ("JWT service_role" if key.startswith("eyJ")
          else "sb_secret_..."  if key.startswith("sb_secret")
          else "sb_publishable_... (WRONG - this one cannot read)" if key.startswith("sb_publishable")
-         else "unrecognised")
+         else "unrecognized")
 print(f"key looks like: {shape}  (len {len(key)})\n")
 
 def call(path, label):

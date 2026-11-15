@@ -2,7 +2,7 @@
 """Build images/og-preview.jpg, the card shown when the link is shared.
 
 Without this the link previews as the bare cutout of Jeannie, whose
-transparency messaging apps flatten to a muddy grey. This composes her onto
+transparency messaging apps flatten to a muddy gray. This composes her onto
 the actual invitation: dark room, mirror ball, her name.
 
     python3 scripts/make-og.py
@@ -31,16 +31,16 @@ def font(size, index=1):
 
 
 def background(w, h):
-    """Dark room with coloured bloom, built in numpy so the gradients are smooth."""
+    """Dark room with colored bloom, built in numpy so the gradients are smooth."""
     yy, xx = np.mgrid[0:h, 0:w].astype(np.float32)
     img = np.zeros((h, w, 3), np.float32)
     img[:] = np.array([7, 5, 14], np.float32)
 
-    def glow(cx, cy, radius, colour, strength):
+    def glow(cx, cy, radius, color, strength):
         d = np.sqrt((xx - cx) ** 2 + (yy - cy) ** 2) / radius
         f = np.clip(1.0 - d, 0, 1) ** 2 * strength
         for c in range(3):
-            img[:, :, c] += f * colour[c]
+            img[:, :, c] += f * color[c]
 
     glow(w * 0.22, h * 0.12, w * 0.62, (58, 22, 92), 1.0)     # violet behind the ball
     glow(w * 0.08, h * 0.55, w * 0.45, (120, 26, 78), 0.55)   # magenta left
