@@ -99,9 +99,9 @@ Google Drive, which is the only real protection against losing them again. And
 it touches the database daily, so a free-tier Supabase project never sits idle
 the week it takes to pause itself.
 
-Set it up once:
+Set it up once. The script asks for the service_role key and stores it in the
+Keychain itself, reading it hidden so it never lands in shell history:
 
-    security add-generic-password -a "$USER" -s jeannie70-supabase -w 'SERVICE_KEY'
     ./scripts/install-daily-export.sh
 
 The key lives in the macOS Keychain, never in this repo. Log goes to

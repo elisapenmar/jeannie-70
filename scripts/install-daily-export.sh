@@ -5,9 +5,20 @@ REPO="$(cd "$(dirname "$0")/.." && pwd)"
 PLIST="$HOME/Library/LaunchAgents/com.jeannie70.export.plist"
 
 if ! security find-generic-password -a "$USER" -s jeannie70-supabase -w >/dev/null 2>&1; then
-  echo "Store the Supabase service key first:"
-  echo "  security add-generic-password -a \"\$USER\" -s jeannie70-supabase -w 'YOUR_KEY'"
-  exit 1
+  echo "Supabase service_role key needed. Find it at:"
+  echo "  https://supabase.com/dashboard/project/rjnfvyjghybutgrtbbeu/settings/api-keys"
+  echo "Pick service_role, not anon and not publishable."
+  echo
+  # -s so the key is not echoed to the screen and does not reach the shell
+  # history the way a typed command would.
+  printf "Paste it here and press return: "
+  read -rs KEY
+  echo
+  if [ -z "$KEY" ]; then echo "Nothing pasted. Stopping."; exit 1; fi
+  security add-generic-password -a "$USER" -s jeannie70-supabase -w "$KEY"
+  unset KEY
+  echo "Stored in your Keychain."
+  echo
 fi
 
 mkdir -p "$HOME/Library/LaunchAgents"
