@@ -700,29 +700,32 @@ textarea{ resize:vertical; line-height:1.6; }
   border:1px solid rgba(255,215,106,.3);
 }
 
-/* three ways to send a letter */
+/* Three ways to send a letter. An unordered list with icons, not numbers:
+   these are alternatives, and numbering them made people read steps. */
+.ways-intro{
+  margin:30px 0 14px; text-align:center;
+  color:var(--ink-dim); font-weight:300; font-size:.95rem;
+}
 .ways{
-  list-style:none; counter-reset:way;
-  margin:30px 0; padding:0;
-  display:grid; gap:14px; text-align:left;
+  list-style:none;
+  margin:0 0 30px; padding:0;
+  display:grid; gap:12px; text-align:left;
 }
 .ways li{
-  counter-increment:way;
   position:relative;
-  padding:16px 18px 16px 54px;
+  padding:16px 18px 16px 58px;
   border-radius:14px;
   background:rgba(255,255,255,.04);
   border:1px solid rgba(255,255,255,.1);
   line-height:1.6; color:var(--ink-dim); font-weight:300;
 }
-.ways li::before{
-  content:counter(way);
+.ways .badge{
   position:absolute; left:16px; top:15px;
-  width:26px; height:26px; border-radius:50%;
+  width:28px; height:28px; border-radius:9px;
   display:grid; place-items:center;
-  font-size:.82rem; font-weight:600; color:#1a0620;
   background:linear-gradient(100deg,#ffe9a8,#ffb3d8);
 }
+.ways .badge svg{ width:16px; height:16px; fill:#1a0620; display:block; }
 .ways strong{ display:block; color:var(--ink); font-weight:500; margin-bottom:2px; }
 
 @media (max-width:420px){
@@ -730,4 +733,33 @@ textarea{ resize:vertical; line-height:1.6; }
 }
 
 .calm .tab[aria-selected="true"]{ background:#ffe7f3; box-shadow:none; }
-.calm .ways li::before{ background:#ffe7f3; }
+.calm .ways .badge{ background:#ffe7f3; }
+
+
+/* ============================================================
+   DICTATION
+   ============================================================ */
+
+.dictate-row{ display:flex; }
+.dictate{
+  display:inline-flex; align-items:center; gap:8px;
+  padding:10px 16px 10px 13px; cursor:pointer;
+  border-radius:100px; border:1px solid rgba(255,255,255,.26);
+  background:rgba(255,255,255,.05); color:var(--ink);
+  font-family:inherit; font-size:.9rem; font-weight:400;
+  transition:background .15s ease, border-color .15s ease;
+}
+.dictate:hover{ background:rgba(255,255,255,.1); border-color:rgba(255,255,255,.4); }
+.dictate:focus-visible{ outline:2px solid var(--pink); outline-offset:2px; }
+.dictate svg{ width:17px; height:17px; fill:currentColor; display:block; }
+
+.dictate.listening{
+  color:#1a0620; border-color:transparent;
+  background:linear-gradient(100deg,#ffe9a8,#ffb3d8);
+  animation:listening 1.4s ease-in-out infinite;
+}
+@keyframes listening{
+  0%,100%{ box-shadow:0 0 0 0 rgba(255,79,163,.5); }
+  50%    { box-shadow:0 0 0 10px rgba(255,79,163,0); }
+}
+.calm .dictate.listening{ background:#ffe7f3; animation:none; }
