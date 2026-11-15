@@ -868,3 +868,33 @@ textarea{ resize:vertical; line-height:1.6; }
 
 .calm .pick.on{ background:#ffe7f3; }
 .calm .pick .badge{ background:#ffe7f3; }
+
+
+/* Record or upload, as a matched pair rather than one stacked under the
+   other: they are two ways of doing the same thing. */
+.duo{ display:flex; align-items:stretch; gap:10px; }
+.duo-or{
+  align-self:center; flex:0 0 auto;
+  font-size:.72rem; letter-spacing:.18em;
+  text-transform:uppercase; color:var(--ink-dim);
+}
+.duo > .record,
+.duo > .duo-drop{
+  flex:1 1 0; min-width:0; margin:0;
+  display:flex; align-items:center; justify-content:center; gap:8px;
+  padding:16px 12px; border-radius:14px;
+  text-align:center; font-size:.95rem;
+}
+.duo > .duo-drop{
+  border:1.5px dashed rgba(255,255,255,.26);
+  background:rgba(255,255,255,.03);
+}
+.duo > .duo-drop strong{ font-weight:500; font-size:.95rem; }
+.duo > .record{ border-radius:14px; }
+
+@media (max-width:430px){
+  .duo{ gap:8px; }
+  .duo > .record, .duo > .duo-drop{ padding:14px 8px; font-size:.88rem; }
+  .duo > .duo-drop strong{ font-size:.88rem; }
+  .duo-or{ font-size:.66rem; letter-spacing:.1em; }
+}

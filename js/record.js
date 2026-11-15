@@ -39,8 +39,11 @@
                      navigator.mediaDevices.getUserMedia &&
                      window.MediaRecorder);
   if (!canRecord) {
-    /* A dead button helps nobody, but the upload below it still works. */
+    /* A dead button helps nobody, but the upload beside it still works.
+       The "or" has to go with it, or it reads as a missing option. */
     if (btn) btn.remove();
+    var orWord = document.getElementById('duoOr');
+    if (orWord) orWord.remove();
     if (status) {
       status.textContent = 'This browser can\u2019t record directly. ' +
                            'Use your phone\u2019s voice memo app and upload the file below.';
@@ -60,7 +63,7 @@
 
   function paint(recording) {
     btn.innerHTML = (recording ? STOP : MIC) +
-      '<span>' + (recording ? 'Stop' : 'Record a voice message') + '</span>';
+      '<span>' + (recording ? 'Stop' : 'Record now') + '</span>';
     btn.classList.toggle('recording', recording);
     btn.setAttribute('aria-pressed', recording ? 'true' : 'false');
   }

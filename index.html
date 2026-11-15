@@ -28,7 +28,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Monoton&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=41">
+<link rel="stylesheet" href="css/style.css?v=43">
 <script>
 /* Set before anything paints, so a calm visitor never catches a flash of the
    full disco. Honors the system preference until they choose for themselves. */
@@ -169,14 +169,16 @@ try {
           </button>
           <div class="open" id="open-speak" hidden>
             <div id="recorder">
-              <button class="record" id="recordBtn" type="button" aria-pressed="false"></button>
+              <div class="duo">
+                <button class="record" id="recordBtn" type="button" aria-pressed="false"></button>
+                <span class="duo-or" id="duoOr">or</span>
+                <label class="drop duo-drop" for="audioFiles">
+                  <strong>Upload a file</strong>
+                </label>
+              </div>
+              <p class="hint center">A voice memo from your phone works perfectly.</p>
               <p class="hint" id="recordStatus"></p>
             </div>
-            <p class="hint center">or, if you already recorded one</p>
-            <label class="drop small" for="audioFiles">
-              <strong>Upload an audio file</strong>
-              <small>A voice memo from your phone is perfect</small>
-            </label>
             <input id="audioFiles" type="file" name="audioFiles"
                    accept="audio/*,.m4a,.mp3,.wav,.aac,.ogg,.webm,.caf" multiple hidden>
             <div class="recordings" id="recordings"></div>
@@ -224,7 +226,6 @@ try {
       <button class="cta submit" type="submit">Send your letter</button>
       <p class="note" id="formNote" role="status" aria-live="polite"></p>
       <p class="choose-note">
-        Five minutes, and nothing to sign up for.<br>
         Come back as many times as you like before the 29th.
       </p>
     </form>
@@ -290,14 +291,14 @@ try {
 
 <footer class="foot">Made with love and far too many sequins.</footer>
 
-<script src="js/calm.js?v=41"></script>
-<script src="js/config.js?v=41"></script>
-<script src="js/countdown.js?v=41"></script>
-<script src="js/tabs.js?v=41"></script>
-<script src="js/picker.js?v=41"></script>
-<script src="js/record.js?v=41"></script>
-<script src="js/form.js?v=41"></script>
-<script src="js/disco.js?v=41"></script>
-<script src="js/audio.js?v=41"></script>
+<script src="js/calm.js?v=43"></script>
+<script src="js/config.js?v=43"></script>
+<script src="js/countdown.js?v=43"></script>
+<script src="js/tabs.js?v=43"></script>
+<script src="js/picker.js?v=43"></script>
+<script src="js/record.js?v=43"></script>
+<script src="js/form.js?v=43"></script>
+<script src="js/disco.js?v=43"></script>
+<script src="js/audio.js?v=43"></script>
 </body>
 </html>
