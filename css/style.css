@@ -274,7 +274,7 @@ body{
   margin:14px 0 6px;
   font-family:"Monoton", cursive; font-weight:400;
   font-size:clamp(1.7rem,8vw,2.8rem);
-  text-transform:uppercase; letter-spacing:.02em;
+  text-transform:uppercase; letter-spacing:.02em; word-spacing:.5em;
 }
 .back{
   color:var(--ink-dim); font-size:.82rem; text-decoration:none;
@@ -308,7 +308,7 @@ body{
   font-family:"Monoton", cursive;
   font-size:clamp(1.6rem,6.4vw,2.4rem);
   font-weight:400; margin:0 0 24px; text-align:center;
-  text-transform:uppercase; letter-spacing:.02em;
+  text-transform:uppercase; letter-spacing:.02em; word-spacing:.5em;
 }
 .lede{ color:var(--ink-dim); line-height:1.65; text-align:center; margin:0 0 30px; }
 
