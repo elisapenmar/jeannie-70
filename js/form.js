@@ -427,6 +427,10 @@
       if (!r.ok) return r.text().then(function (t) {
         throw new Error('Save failed (' + r.status + '): ' + t);
       });
+      /* Stored, so the local copy has done its job. Clearing any earlier
+         would risk discarding the only copy; leaving it would hand the next
+         person on a shared phone somebody else's half-written letter. */
+      if (window.PARTY70_DRAFT_CLEAR) window.PARTY70_DRAFT_CLEAR();
       thankThem();
     }).catch(function (err) {
       busy = false;
