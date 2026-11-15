@@ -28,7 +28,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Monoton&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=37">
+<link rel="stylesheet" href="css/style.css?v=38">
 <script>
 /* Set before anything paints, so a calm visitor never catches a flash of the
    full disco. Honors the system preference until they choose for themselves. */
@@ -110,37 +110,108 @@ try {
     <p class="ways-intro">Three ways. Whichever suits you &mdash; do as many as you like,
       they all end up in the same book.</p>
 
-    <ul class="ways">
-      <li><a class="waylink" href="memories.html#handwrite">
-        <span class="badge"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17.25V21h3.75L17.8 9.94l-3.75-3.75L3 17.25zM20.7 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg></span>
-        <strong>Handwrite it.</strong>
-        Photograph the note and upload it. The book will have your own
-        handwriting in it, which beats anything typed.
-      </a></li>
-      <li><a class="waylink" href="memories.html#type">
-        <span class="badge"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 5H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zM7 9h2v2H7V9zm0 4h2v2H7v-2zm4-4h2v2h-2V9zm0 4h6v2h-6v-2zm4-4h2v2h-2V9z"/></svg></span>
-        <strong>Type it.</strong>
-        Straight into the box on the next page, or in Word or Pages at your own
-        pace and upload the file.
-      </a></li>
-      <li><a class="waylink" href="memories.html#speak">
-        <span class="badge"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V21h2v-3.08A7 7 0 0 0 19 11h-2z"/></svg></span>
-        <strong>Speak it.</strong>
-        Record a voice message and just talk. Read your handwritten note aloud
-        and she gets both the page and your voice.
-      </a></li>
-    </ul>
+    <form class="form" id="partyForm" data-kind="memory" novalidate>
+      <label class="field">
+        <span>Your name</span>
+        <input type="text" name="name" autocomplete="name" required>
+      </label>
 
-    <p class="lede">
-      And a favorite photograph of you, however old. She knows what she looks
-      like; it&rsquo;s you she wants in there.
-    </p>
+      <ul class="ways">
+        <li>
+          <button type="button" class="waybtn" id="pick-write"
+                  aria-expanded="false" aria-controls="open-write">
+            <span class="badge"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17.25V21h3.75L17.8 9.94l-3.75-3.75L3 17.25zM20.7 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg></span>
+            <strong>Handwrite it.</strong>
+            Photograph the note and upload it. The book will have your own
+            handwriting in it, which beats anything typed.
+          </button>
+          <div class="open" id="open-write" hidden>
+            <label class="drop small" for="docs">
+              <strong>Add a photo of your note</strong>
+              <small>Or a typed document, if you&rsquo;d rather</small>
+            </label>
+            <input id="docs" type="file" name="docs"
+                   accept="image/*,.heic,.heif,.pdf,.doc,.docx,.pages,.txt,.rtf" multiple hidden>
+            <div class="filelist" id="filelist"></div>
+          </div>
+        </li>
 
-    <a class="cta" href="memories.html">Send your letter</a>
-    <p class="choose-note">
-      Five minutes, and nothing to sign up for.<br>
-      Come back as many times as you like before the 29th.
-    </p>
+        <li>
+          <button type="button" class="waybtn" id="pick-type"
+                  aria-expanded="false" aria-controls="open-type">
+            <span class="badge"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 5H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zM7 9h2v2H7V9zm0 4h2v2H7v-2zm4-4h2v2h-2V9zm0 4h6v2h-6v-2zm4-4h2v2h-2V9z"/></svg></span>
+            <strong>Type it.</strong>
+            Straight into the box, or in Word or Pages at your own pace and
+            upload the file.
+          </button>
+          <div class="open" id="open-type" hidden>
+            <textarea name="memory" rows="10" aria-label="Type your letter"></textarea>
+          </div>
+        </li>
+
+        <li>
+          <button type="button" class="waybtn" id="pick-speak"
+                  aria-expanded="false" aria-controls="open-speak">
+            <span class="badge"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V21h2v-3.08A7 7 0 0 0 19 11h-2z"/></svg></span>
+            <strong>Speak it.</strong>
+            Record a voice message and just talk. Read your handwritten note
+            aloud and she gets both the page and your voice.
+          </button>
+          <div class="open" id="open-speak" hidden>
+            <div id="recorder">
+              <button class="record" id="recordBtn" type="button" aria-pressed="false"></button>
+              <p class="hint" id="recordStatus"></p>
+              <div class="recordings" id="recordings"></div>
+            </div>
+          </div>
+        </li>
+      </ul>
+
+      <div class="field">
+        <span>Photos</span>
+        <p class="hint">
+          A favorite photograph of you, however old. She knows what she looks
+          like; it&rsquo;s you she wants in there. Old prints are welcome: a
+          snapshot of a print works fine.
+        </p>
+        <label class="drop" for="photos">
+          <strong>Choose photos</strong>
+        </label>
+        <input id="photos" type="file" name="photos"
+               accept="image/*,.heic,.heif" multiple hidden>
+        <div class="thumbs" id="thumbs"></div>
+      </div>
+
+      <label class="field">
+        <span>Songs for the dance floor</span>
+        <p class="hint">
+          Anything that reminds you of her. For example: Dancing Queen, by Abba.
+        </p>
+        <textarea name="songs" rows="4"></textarea>
+      </label>
+
+      <div class="field">
+        <label class="check">
+          <input type="checkbox" id="wantCopy" checked>
+          <span>Email me a copy of what I send</span>
+        </label>
+        <p class="hint">
+          Worth keeping: if anything ever goes missing at our end, you can send
+          it straight back.
+        </p>
+        <label class="field sub" id="emailWrap">
+          <span>Your email</span>
+          <input type="email" name="email" autocomplete="email">
+        </label>
+      </div>
+
+      <button class="cta submit" type="submit">Send your letter</button>
+      <p class="note" id="formNote" role="status" aria-live="polite"></p>
+      <p class="choose-note">
+        Five minutes, and nothing to sign up for.<br>
+        Come back as many times as you like before the 29th.
+      </p>
+    </form>
   </div>
 
   <!-- ---------- party details ---------- -->
@@ -203,11 +274,14 @@ try {
 
 <footer class="foot">Made with love and far too many sequins.</footer>
 
-<script src="js/calm.js?v=37"></script>
-<script src="js/config.js?v=37"></script>
-<script src="js/countdown.js?v=37"></script>
-<script src="js/tabs.js?v=37"></script>
-<script src="js/disco.js?v=37"></script>
-<script src="js/audio.js?v=37"></script>
+<script src="js/calm.js?v=38"></script>
+<script src="js/config.js?v=38"></script>
+<script src="js/countdown.js?v=38"></script>
+<script src="js/tabs.js?v=38"></script>
+<script src="js/picker.js?v=38"></script>
+<script src="js/record.js?v=38"></script>
+<script src="js/form.js?v=38"></script>
+<script src="js/disco.js?v=38"></script>
+<script src="js/audio.js?v=38"></script>
 </body>
 </html>

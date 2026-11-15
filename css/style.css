@@ -728,23 +728,34 @@ textarea{ resize:vertical; line-height:1.6; }
 .ways .badge svg{ width:16px; height:16px; fill:#1a0620; display:block; }
 .ways strong{ display:block; color:var(--ink); font-weight:500; margin-bottom:2px; }
 
-/* The whole card is a link now: people try to click these, so they should
-   click, and they should land with that option already open. */
-.ways li{ padding:0; }
-.waylink{
-  display:block; position:relative;
-  padding:16px 18px 16px 58px;
-  color:inherit; text-decoration:none; border-radius:14px;
+/* The card itself is the control. People try to click these, so they click,
+   and the look is unchanged: a button reset inheriting the card's own padding
+   and type rather than a new style. */
+.ways li{ padding:0; overflow:hidden; }
+.waybtn{
+  display:block; position:relative; width:100%;
+  padding:16px 42px 16px 58px;
+  margin:0; border:0; background:none; cursor:pointer;
+  font:inherit; color:var(--ink-dim); font-weight:300; line-height:1.6;
+  text-align:left;
   transition:background .15s ease;
 }
-.waylink:hover{ background:rgba(255,255,255,.05); }
-.waylink:focus-visible{ outline:2px solid var(--pink); outline-offset:-2px; }
-.waylink::after{
-  content:""; position:absolute; right:18px; top:50%;
-  width:7px; height:7px; margin-top:-4px;
+.waybtn:hover{ background:rgba(255,255,255,.05); }
+.waybtn:focus-visible{ outline:2px solid var(--pink); outline-offset:-2px; }
+.waybtn::after{
+  content:""; position:absolute; right:20px; top:22px;
+  width:8px; height:8px;
   border-right:1.5px solid var(--ink-dim); border-bottom:1.5px solid var(--ink-dim);
-  transform:rotate(-45deg);
+  transform:rotate(45deg);
+  transition:transform .2s ease;
 }
+.waybtn[aria-expanded="true"]::after{ transform:rotate(-135deg); top:26px; }
+.ways li:has(.waybtn[aria-expanded="true"]){
+  border-color:rgba(255,215,106,.45);
+  background:rgba(255,255,255,.06);
+}
+.ways .open{ padding:0 18px 18px; margin-top:0; }
+
 
 @media (max-width:420px){
   .tab{ font-size:.72rem; letter-spacing:.08em; padding:11px 8px; }
