@@ -135,6 +135,19 @@ The key lives in the macOS Keychain, never in this repo. Log goes to
 
 ## Email on every submission
 
+Call it `net.http_post`, not `extensions.net.http_post`. pg_net creates its
+functions in a schema called `net` whatever you install the extension into,
+and the wrong name raised an error the handler below swallowed, so no email
+was ever attempted and nothing said so.
+
+Failures now land in `party70_notify_errors`. Swallowing them is still right,
+since a mail problem must never cost a guest their letter, but silent should
+not mean invisible. To check mail is working:
+
+    select status_code, content, created from net._http_response
+    order by created desc limit 5;
+
+
 Only to Elisa. Guests are told nothing about email and promised no copy:
 Resend will not deliver to anyone but the account's own address until a domain
 is verified, which costs money, and offering a copy that cannot arrive is
