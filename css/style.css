@@ -653,3 +653,81 @@ textarea{ resize:vertical; line-height:1.6; }
   .subhead{ padding-top:calc(env(safe-area-inset-top) + 54px); }
   .calmswitch{ font-size:.75rem; padding:8px 12px 8px 10px; }
 }
+
+
+/* ============================================================
+   TABS
+   ============================================================ */
+
+.tabs{ position:relative; z-index:2; max-width:640px; margin:0 auto; }
+
+.tablist{
+  /* Parks below the floating calm and music buttons, which are fixed and were
+     otherwise landing on top of the tab labels as the list scrolled past.
+     Sticky also keeps the tabs reachable part-way down a long panel. */
+  position:sticky; z-index:15;
+  top:calc(env(safe-area-inset-top) + 62px);
+  display:flex; gap:6px; justify-content:center;
+  padding:6px; margin:0 22px;
+  border:1px solid rgba(255,255,255,.14); border-radius:100px;
+  background:rgba(12,8,20,.5);
+  -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px);
+}
+.tab{
+  flex:1 1 0; min-width:0;
+  padding:12px 14px; border:0; border-radius:100px; cursor:pointer;
+  font-family:inherit; font-size:.82rem; font-weight:500;
+  letter-spacing:.12em; text-transform:uppercase;
+  color:var(--ink-dim); background:none;
+  transition:color .15s ease, background .15s ease;
+}
+.tab:hover{ color:var(--ink); }
+.tab:focus-visible{ outline:2px solid var(--pink); outline-offset:2px; }
+.tab[aria-selected="true"]{
+  color:#1a0620;
+  background:linear-gradient(100deg,#fff 0%,#ffe9a8 45%,#ffb3d8 100%);
+  box-shadow:0 4px 18px rgba(255,79,163,.3);
+}
+
+.tabpanel{ padding-top:34px; }
+.tabpanel:focus{ outline:none; }
+
+/* the line that has to land */
+.lede.emphatic{
+  color:var(--ink); font-weight:400;
+  padding:16px 18px; border-radius:14px;
+  background:rgba(255,215,106,.1);
+  border:1px solid rgba(255,215,106,.3);
+}
+
+/* three ways to send a letter */
+.ways{
+  list-style:none; counter-reset:way;
+  margin:30px 0; padding:0;
+  display:grid; gap:14px; text-align:left;
+}
+.ways li{
+  counter-increment:way;
+  position:relative;
+  padding:16px 18px 16px 54px;
+  border-radius:14px;
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.1);
+  line-height:1.6; color:var(--ink-dim); font-weight:300;
+}
+.ways li::before{
+  content:counter(way);
+  position:absolute; left:16px; top:15px;
+  width:26px; height:26px; border-radius:50%;
+  display:grid; place-items:center;
+  font-size:.82rem; font-weight:600; color:#1a0620;
+  background:linear-gradient(100deg,#ffe9a8,#ffb3d8);
+}
+.ways strong{ display:block; color:var(--ink); font-weight:500; margin-bottom:2px; }
+
+@media (max-width:420px){
+  .tab{ font-size:.72rem; letter-spacing:.08em; padding:11px 8px; }
+}
+
+.calm .tab[aria-selected="true"]{ background:#ffe7f3; box-shadow:none; }
+.calm .ways li::before{ background:#ffe7f3; }

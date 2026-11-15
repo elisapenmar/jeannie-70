@@ -28,7 +28,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Monoton&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=27">
+<link rel="stylesheet" href="css/style.css?v=30">
 <script>
 /* Set before anything paints, so a calm visitor never catches a flash of the
    full disco. Honours the system preference until they choose for themselves. */
@@ -80,35 +80,76 @@ try {
 
   <div class="lights front" id="lightsFront" aria-hidden="true"></div>
 
-  <a class="scroll-hint" href="#details" aria-label="Scroll for details">
+  <a class="scroll-hint" href="#more" aria-label="Scroll for more">
     <span></span>
   </a>
 </section>
 
-<!-- ============ DETAILS ============ -->
-<section class="panel" id="details">
-  <h2 class="chrome">The Details</h2>
+<!-- ============ TABS ============ -->
+<section class="tabs" id="more">
+  <div class="tablist" role="tablist" aria-label="More about the party">
+    <button class="tab" role="tab" id="tab-ask"   aria-controls="panel-ask"   aria-selected="true">What we need</button>
+    <button class="tab" role="tab" id="tab-party" aria-controls="panel-party" aria-selected="false" tabindex="-1">Party details</button>
+  </div>
+
+  <!-- ---------- what we need ---------- -->
+  <div class="tabpanel panel" role="tabpanel" id="panel-ask" aria-labelledby="tab-ask" tabindex="0">
+    <h2 class="chrome">Write her a letter</h2>
+
+    <p class="lede">
+      We&rsquo;re binding letters, photographs and songs into a book for her
+      seventieth. It goes to print on <strong>Sunday, November 29</strong>.
+    </p>
+
+    <p class="lede emphatic">
+      Please send one even if you can&rsquo;t come. Especially if you
+      can&rsquo;t come. A letter from someone who couldn&rsquo;t be in the room
+      is the part she will read twice.
+    </p>
+
+    <ol class="ways">
+      <li>
+        <strong>Handwrite it.</strong>
+        Photograph the note and upload it. The book will have your own
+        handwriting in it, which beats anything typed.
+      </li>
+      <li>
+        <strong>Type it.</strong>
+        Straight into the box on the page. A sentence is plenty.
+      </li>
+      <li>
+        <strong>Write it elsewhere.</strong>
+        Word, Pages, anywhere. Come back whenever it&rsquo;s ready and upload
+        the file.
+      </li>
+    </ol>
+
+    <p class="lede">
+      And a favourite photograph of you, however old. She knows what she looks
+      like; it&rsquo;s you she wants in there.
+    </p>
+
+    <a class="cta" href="memories.html">Send your letter</a>
+    <p class="choose-note">
+      Five minutes, and nothing to sign up for.<br>
+      Come back as many times as you like before the 29th.
+    </p>
+  </div>
+
+  <!-- ---------- party details ---------- -->
+  <div class="tabpanel panel" role="tabpanel" id="panel-party" aria-labelledby="tab-party" tabindex="0" hidden>
+    <h2 class="chrome">The Details</h2>
   <dl class="details">
     <div><dt>When</dt><dd>Saturday, January 23, 2027<br>5:00 in the evening</dd></div>
     <div><dt>Where</dt><dd>7505 W Encinas Ln<br>Phoenix, AZ 85043</dd></div>
-    <div><dt>Memories by</dt><dd>Sunday, November 29</dd></div>
     <div><dt>Please reply by</dt><dd>Saturday, December 19</dd></div>
     <div><dt>Dress code</dt><dd>Sequins strongly encouraged</dd></div>
     <div><dt>Questions</dt><dd>Elisa &middot; <a href="tel:+18186488023">(818) 648-8023</a></dd></div>
   </dl>
-</section>
-
-<!-- ============ THE TWO THINGS TO DO ============ -->
-<section class="panel choose" id="choose">
-  <a class="cta" href="memories.html">Send your message</a>
-  <a class="cta ghost" href="rsvp.html">RSVP</a>
-  <p class="choose-note">
-    Her book goes to print, so it needs everything by <strong>Sunday,
-    November 29</strong>.<br>
-    Handwrite a note, photograph it, and add a favourite photo of you.<br>
-    The RSVP can wait, any time before December 19.
-  </p>
-</section>
+    <a class="cta ghost" href="rsvp.html">RSVP</a>
+    <p class="choose-note">
+      The head count can wait, any time before December 19.
+    </p>
 
 <!-- ============ THE SONG ============ -->
 <section class="panel slim" id="song">
@@ -150,13 +191,16 @@ try {
     </div>
   </details>
 </section>
+  </div>
+</section>
 
 <footer class="foot">Made with love and far too many sequins.</footer>
 
-<script src="js/calm.js?v=27"></script>
-<script src="js/config.js?v=27"></script>
-<script src="js/countdown.js?v=27"></script>
-<script src="js/disco.js?v=27"></script>
-<script src="js/audio.js?v=27"></script>
+<script src="js/calm.js?v=30"></script>
+<script src="js/config.js?v=30"></script>
+<script src="js/countdown.js?v=30"></script>
+<script src="js/tabs.js?v=30"></script>
+<script src="js/disco.js?v=30"></script>
+<script src="js/audio.js?v=30"></script>
 </body>
 </html>
