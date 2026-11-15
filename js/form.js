@@ -246,7 +246,7 @@
 
       var later = document.createElement('p');
       later.className = 'note';
-      later.textContent = 'Or come back to it any time before December 19.';
+      later.textContent = 'Or come back to it any time before November 29.';
       panel.appendChild(later);
     } else {
       panel.innerHTML =
@@ -254,7 +254,7 @@
         '<p>That is safely in the pile now, and it will reach her.</p>' +
         '<p>Still hunting for a photograph, or is someone else in the house ' +
         'writing their own? Come back to this page any time before ' +
-        '<strong>Saturday, December 19</strong>.</p>';
+        '<strong>Sunday, November 29</strong>.</p>';
 
       var rsvp = document.createElement('p');
       rsvp.className = 'note';
