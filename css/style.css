@@ -728,6 +728,24 @@ textarea{ resize:vertical; line-height:1.6; }
 .ways .badge svg{ width:16px; height:16px; fill:#1a0620; display:block; }
 .ways strong{ display:block; color:var(--ink); font-weight:500; margin-bottom:2px; }
 
+/* The whole card is a link now: people try to click these, so they should
+   click, and they should land with that option already open. */
+.ways li{ padding:0; }
+.waylink{
+  display:block; position:relative;
+  padding:16px 18px 16px 58px;
+  color:inherit; text-decoration:none; border-radius:14px;
+  transition:background .15s ease;
+}
+.waylink:hover{ background:rgba(255,255,255,.05); }
+.waylink:focus-visible{ outline:2px solid var(--pink); outline-offset:-2px; }
+.waylink::after{
+  content:""; position:absolute; right:18px; top:50%;
+  width:7px; height:7px; margin-top:-4px;
+  border-right:1.5px solid var(--ink-dim); border-bottom:1.5px solid var(--ink-dim);
+  transform:rotate(-45deg);
+}
+
 @media (max-width:420px){
   .tab{ font-size:.72rem; letter-spacing:.08em; padding:11px 8px; }
 }
@@ -776,3 +794,66 @@ textarea{ resize:vertical; line-height:1.6; }
   flex:0 0 auto; width:26px; height:26px; border:0; border-radius:50%;
   background:rgba(0,0,0,.5); color:#fff; cursor:pointer; font-size:15px; line-height:1;
 }
+
+
+/* ============================================================
+   THE LETTER PICKER
+   ============================================================ */
+
+/* Handwrite and Type side by side: a choice between two. */
+.picker{ display:flex; align-items:center; gap:10px; }
+.pick-or{
+  flex:0 0 auto; font-size:.72rem; letter-spacing:.18em;
+  text-transform:uppercase; color:var(--ink-dim);
+}
+
+.pick{
+  flex:1 1 0; min-width:0;
+  display:flex; align-items:center; justify-content:center; gap:9px;
+  padding:16px 14px; cursor:pointer;
+  border-radius:14px; border:1px solid rgba(255,255,255,.18);
+  background:rgba(255,255,255,.05); color:var(--ink);
+  font-family:inherit; font-size:1rem; font-weight:500; text-align:center;
+  transition:background .15s ease, border-color .15s ease, transform .1s ease;
+}
+.pick:hover{ background:rgba(255,255,255,.1); border-color:rgba(255,255,255,.38); }
+.pick:active{ transform:translateY(1px); }
+.pick:focus-visible{ outline:2px solid var(--pink); outline-offset:2px; }
+
+/* Speak sits below and spans the width: an addition, not an alternative. */
+.pick.wide{ width:100%; margin-top:12px; }
+
+.pick .badge{
+  flex:0 0 auto;
+  width:30px; height:30px; border-radius:9px;
+  display:grid; place-items:center;
+  background:linear-gradient(100deg,#ffe9a8,#ffb3d8);
+}
+.pick .badge svg{ width:17px; height:17px; fill:#1a0620; display:block; }
+
+.pick.on{
+  border-color:transparent; color:#1a0620;
+  background:linear-gradient(100deg,#fff 0%,#ffe9a8 45%,#ffb3d8 100%);
+}
+.pick.on .badge{ background:rgba(26,6,32,.14); }
+.pick.on .badge svg{ fill:#1a0620; }
+
+.open{ margin-top:14px; display:grid; gap:10px; }
+
+.hint.center{ text-align:center; margin-top:8px; }
+
+/* copy-to-me */
+.check{ display:flex; align-items:center; gap:11px; cursor:pointer; }
+.check input{ width:20px; height:20px; accent-color:#ff4fa3; flex:0 0 auto; }
+.check span{ font-size:1rem; font-weight:400; color:var(--ink); }
+.field.sub{ margin-top:4px; }
+
+@media (max-width:430px){
+  .picker{ gap:8px; }
+  .pick{ font-size:.92rem; padding:14px 10px; gap:7px; }
+  .pick .badge{ width:26px; height:26px; }
+  .pick-or{ font-size:.66rem; letter-spacing:.1em; }
+}
+
+.calm .pick.on{ background:#ffe7f3; }
+.calm .pick .badge{ background:#ffe7f3; }
