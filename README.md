@@ -135,6 +135,13 @@ The key lives in the macOS Keychain, never in this repo. Log goes to
 
 ## Email on every submission
 
+Only to Elisa. Guests are told nothing about email and promised no copy:
+Resend will not deliver to anyone but the account's own address until a domain
+is verified, which costs money, and offering a copy that cannot arrive is
+worse than offering none. The daily export covers the loss that copy guarded
+against.
+
+
 A trigger on `party70_rsvps` posts to Resend through `pg_net`. Configure it by
 putting the key and the address in `party70_settings`, which has RLS on and no
 policies, so anonymous callers cannot read it:

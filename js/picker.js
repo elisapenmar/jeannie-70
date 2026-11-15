@@ -54,22 +54,4 @@
   /* Changing only the hash does not reload the page, so without this a link
      tapped while already here would silently do nothing. */
   window.addEventListener('hashchange', function () { fromHash(true); });
-
-  /* ---------------------------------------------------------
-     The copy-to-me checkbox
-     --------------------------------------------------------- */
-  var want_copy = document.getElementById('wantCopy');
-  var wrap      = document.getElementById('emailWrap');
-  if (!want_copy || !wrap) return;
-  var input = wrap.querySelector('input');
-
-  function sync() {
-    wrap.hidden = !want_copy.checked;
-    /* Required only while it is showing: a required field inside a hidden
-       block blocks submission with a message nobody can see. */
-    if (want_copy.checked) input.setAttribute('required', '');
-    else { input.removeAttribute('required'); input.value = ''; }
-  }
-  want_copy.addEventListener('change', sync);
-  sync();
 })();
