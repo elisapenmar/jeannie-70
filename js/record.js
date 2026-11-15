@@ -19,14 +19,32 @@
   /* form.js reads this on submit. */
   window.PARTY70_AUDIO = [];
 
+  var uploader = document.getElementById('audioFiles');
+
+  /* Set up before the capability check. Somebody whose browser cannot record
+     can still upload a voice memo, and that is exactly who needs the list and
+     the registry to work. */
+  if (uploader) {
+    uploader.addEventListener('change', function () {
+      [].slice.call(uploader.files).forEach(function (f) {
+        window.PARTY70_AUDIO.push(f);
+      });
+      uploader.value = '';
+      render();
+      if (status) status.textContent = 'Added. Play it back to check it.';
+    });
+  }
+
   var canRecord = !!(navigator.mediaDevices &&
                      navigator.mediaDevices.getUserMedia &&
                      window.MediaRecorder);
   if (!canRecord) {
-    /* Rather than a dead button: every phone has a voice memo app, and the
-       file can go up with the photographs. */
-    wrap.innerHTML = '<p class="hint">This browser can&rsquo;t record. Use your ' +
-                     'phone&rsquo;s voice memo app and add the file with your photos above.</p>';
+    /* A dead button helps nobody, but the upload below it still works. */
+    if (btn) btn.remove();
+    if (status) {
+      status.textContent = 'This browser can\u2019t record directly. ' +
+                           'Use your phone\u2019s voice memo app and upload the file below.';
+    }
     return;
   }
 

@@ -21,9 +21,14 @@
   var thumbs = document.getElementById('thumbs');
   var docs   = document.getElementById('docs');
   var list   = document.getElementById('filelist');
+  var typed  = document.getElementById('typedDocs');
+  var typedList = document.getElementById('typedlist');
 
   var pickedPhotos = [];
   var pickedDocs   = [];
+  /* Typed documents are kept apart only so each upload box shows its own
+     files; they are the same thing to the database and upload together. */
+  var pickedTyped  = [];
   var busy = false;
 
   function say(msg, kind) {
@@ -116,6 +121,23 @@
     });
   }
 
+  function renderTyped() {
+    if (!typedList) return;
+    typedList.innerHTML = '';
+    pickedTyped.forEach(function (file, i) {
+      var row = document.createElement('div');
+      var label = document.createElement('span');
+      label.textContent = file.name + ' \u00b7 ' + size(file.size);
+      var rm = document.createElement('button');
+      rm.type = 'button';
+      rm.setAttribute('aria-label', 'Remove ' + file.name);
+      rm.textContent = '\u00d7';
+      rm.onclick = function () { pickedTyped.splice(i, 1); renderTyped(); };
+      row.appendChild(label); row.appendChild(rm);
+      typedList.appendChild(row);
+    });
+  }
+
   function renderDocs() {
     if (!list) return;
     list.innerHTML = '';
@@ -143,6 +165,12 @@
     pickedDocs = pickedDocs.concat([].slice.call(docs.files));
     docs.value = '';
     renderDocs();
+  });
+
+  if (typed) typed.addEventListener('change', function () {
+    pickedTyped = pickedTyped.concat([].slice.call(typed.files));
+    typed.value = '';
+    renderTyped();
   });
 
   /* ---------------------------------------------------------
@@ -213,7 +241,7 @@
     form.hidden = false;
     if (form.memory) form.memory.value = '';
     if (form.songs)  form.songs.value  = '';
-    pickedPhotos = []; pickedDocs = [];
+    pickedPhotos = []; pickedDocs = []; pickedTyped = [];
     if (window.PARTY70_AUDIO) window.PARTY70_AUDIO.length = 0;
     renderThumbs(); renderDocs();
 
@@ -297,7 +325,8 @@
     /* An empty memory form is a mis-tap, not a submission. */
     var audio = window.PARTY70_AUDIO || [];
     if (KIND === 'memory' && !value('memory') && !value('songs') &&
-        !pickedPhotos.length && !pickedDocs.length && !audio.length) {
+        !pickedPhotos.length && !pickedDocs.length &&
+        !pickedTyped.length && !audio.length) {
       say('Add a memory, a recording, a photograph or a song first.', 'error');
       return;
     }
@@ -311,7 +340,8 @@
       : String(Date.now()) + '-' + Math.random().toString(16).slice(2);
 
     var photoPaths = [], docPaths = [], audioPaths = [];
-    var total = pickedPhotos.length + pickedDocs.length + audio.length, done = 0;
+    var allDocs = pickedDocs.concat(pickedTyped);
+    var total = pickedPhotos.length + allDocs.length + audio.length, done = 0;
 
     function progress() {
       say(total ? 'Uploading ' + done + ' of ' + total + ' file' +
@@ -339,7 +369,7 @@
       });
     });
 
-    pickedDocs.forEach(function (file, i) {
+    allDocs.forEach(function (file, i) {
       chain = chain.then(function () {
         var path = id + '/documents/' + String(i + 1).padStart(3, '0') + '-' + safeName(file.name);
         return upload(path, file, file.type).then(function (p) {

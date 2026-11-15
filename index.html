@@ -28,7 +28,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Monoton&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=38">
+<link rel="stylesheet" href="css/style.css?v=39">
 <script>
 /* Set before anything paints, so a calm visitor never catches a flash of the
    full disco. Honors the system preference until they choose for themselves. */
@@ -146,6 +146,14 @@ try {
           </button>
           <div class="open" id="open-type" hidden>
             <textarea name="memory" rows="10" aria-label="Type your letter"></textarea>
+            <p class="hint center">or, if you wrote it elsewhere</p>
+            <label class="drop small" for="typedDocs">
+              <strong>Upload a document</strong>
+              <small>Word, Pages, PDF or plain text</small>
+            </label>
+            <input id="typedDocs" type="file" name="typedDocs"
+                   accept=".pdf,.doc,.docx,.pages,.txt,.rtf,.odt" multiple hidden>
+            <div class="filelist" id="typedlist"></div>
           </div>
         </li>
 
@@ -161,8 +169,15 @@ try {
             <div id="recorder">
               <button class="record" id="recordBtn" type="button" aria-pressed="false"></button>
               <p class="hint" id="recordStatus"></p>
-              <div class="recordings" id="recordings"></div>
             </div>
+            <p class="hint center">or, if you already recorded one</p>
+            <label class="drop small" for="audioFiles">
+              <strong>Upload an audio file</strong>
+              <small>A voice memo from your phone is perfect</small>
+            </label>
+            <input id="audioFiles" type="file" name="audioFiles"
+                   accept="audio/*,.m4a,.mp3,.wav,.aac,.ogg,.webm,.caf" multiple hidden>
+            <div class="recordings" id="recordings"></div>
           </div>
         </li>
       </ul>
@@ -170,9 +185,8 @@ try {
       <div class="field">
         <span>Photos</span>
         <p class="hint">
-          A favorite photograph of you, however old. She knows what she looks
-          like; it&rsquo;s you she wants in there. Old prints are welcome: a
-          snapshot of a print works fine.
+          A favorite photograph of you both. Old prints are welcome: a snapshot
+          of a print works fine.
         </p>
         <label class="drop" for="photos">
           <strong>Choose photos</strong>
@@ -274,14 +288,14 @@ try {
 
 <footer class="foot">Made with love and far too many sequins.</footer>
 
-<script src="js/calm.js?v=38"></script>
-<script src="js/config.js?v=38"></script>
-<script src="js/countdown.js?v=38"></script>
-<script src="js/tabs.js?v=38"></script>
-<script src="js/picker.js?v=38"></script>
-<script src="js/record.js?v=38"></script>
-<script src="js/form.js?v=38"></script>
-<script src="js/disco.js?v=38"></script>
-<script src="js/audio.js?v=38"></script>
+<script src="js/calm.js?v=39"></script>
+<script src="js/config.js?v=39"></script>
+<script src="js/countdown.js?v=39"></script>
+<script src="js/tabs.js?v=39"></script>
+<script src="js/picker.js?v=39"></script>
+<script src="js/record.js?v=39"></script>
+<script src="js/form.js?v=39"></script>
+<script src="js/disco.js?v=39"></script>
+<script src="js/audio.js?v=39"></script>
 </body>
 </html>
