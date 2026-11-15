@@ -28,7 +28,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Monoton&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=39">
+<link rel="stylesheet" href="css/style.css?v=40">
 <script>
 /* Set before anything paints, so a calm visitor never catches a flash of the
    full disco. Honors the system preference until they choose for themselves. */
@@ -128,10 +128,12 @@ try {
           <div class="open" id="open-write" hidden>
             <label class="drop small" for="docs">
               <strong>Add a photo of your note</strong>
-              <small>Or a typed document, if you&rsquo;d rather</small>
             </label>
+            <!-- Photos and scans only. Typing has its own card, so offering
+                 Word files here just opened the wrong half of the phone's
+                 file picker. -->
             <input id="docs" type="file" name="docs"
-                   accept="image/*,.heic,.heif,.pdf,.doc,.docx,.pages,.txt,.rtf" multiple hidden>
+                   accept="image/*,.heic,.heif,.pdf" multiple hidden>
             <div class="filelist" id="filelist"></div>
           </div>
         </li>
@@ -288,14 +290,14 @@ try {
 
 <footer class="foot">Made with love and far too many sequins.</footer>
 
-<script src="js/calm.js?v=39"></script>
-<script src="js/config.js?v=39"></script>
-<script src="js/countdown.js?v=39"></script>
-<script src="js/tabs.js?v=39"></script>
-<script src="js/picker.js?v=39"></script>
-<script src="js/record.js?v=39"></script>
-<script src="js/form.js?v=39"></script>
-<script src="js/disco.js?v=39"></script>
-<script src="js/audio.js?v=39"></script>
+<script src="js/calm.js?v=40"></script>
+<script src="js/config.js?v=40"></script>
+<script src="js/countdown.js?v=40"></script>
+<script src="js/tabs.js?v=40"></script>
+<script src="js/picker.js?v=40"></script>
+<script src="js/record.js?v=40"></script>
+<script src="js/form.js?v=40"></script>
+<script src="js/disco.js?v=40"></script>
+<script src="js/audio.js?v=40"></script>
 </body>
 </html>
